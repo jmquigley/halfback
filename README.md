@@ -1,2 +1,3 @@
-# halfback
-A library to simplify SSH interactions with a remote server.  It can be used to run commands, change config, create files, etc.
+# halfback [![Build Status](https://travis-ci.org/jmquigley/halfback.svg?branch=master)](https://travis-ci.org/jmquigley/halfback) [![XO code style](https://img.shields.io/badge/code_style-XO-5ed9c7.svg)](https://github.com/sindresorhus/xo) [![NPM](https://img.shields.io/npm/v/halfback.svg)](https://www.npmjs.com/package/halfback) [![Coverage Status](https://coveralls.io/repos/github/jmquigley/halfback/badge.svg?branch=master)](https://coveralls.io/github/jmquigley/halfback?branch=master)
+
+> A library to simplify SSH interactions with a remote server.  It can be used to run commands, change config, create files, etc.
