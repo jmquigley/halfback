@@ -1,0 +1,16 @@
+node_modules/
+
+test/
+tsconfig.json
+tslint.json
+.travis.yml
+.editorconfig
+.gitignore
+.gitattributes
+
+index.ts
+test.ts
+test.js
+test.d.ts
+
+*.js.map

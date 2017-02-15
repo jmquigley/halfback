@@ -1,5 +1,5 @@
 {
-  "name": "halfback",
+  "name": "util.scaffold",
   "version": "0.0.1",
   "author": "jmquigley <jmquigley@outlook.com>",
   "description": "A library to simplify SSH interactions with a remote server. It can be used to run commands, change config, create files, etc.",
@@ -8,13 +8,13 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/jmquigley/halfback"
+    "url": "https://github.com/jmquigley/util.scaffold"
   },
   "bugs": {
-    "url": "https://github.com/jmquigley/halfback/issues"
+    "url": "https://github.com/jmquigley/util.scaffold/issues"
   },
   "engines": {
-    "node": ">=7.4"
+    "node": ">=7.5"
   },
   "dependencies": {
     "expand-home-dir": "0.0.3",
@@ -29,18 +29,22 @@
     "ava": "^0.18.1",
     "coveralls": "^2.11.15",
     "nyc": "^10.1.2",
-    "util.pkgwrap": "0.0.5",
+    "tslint": "^4.4.2",
+    "typescript": "^2.1.6",
+    "util.pkgwrap": "0.0.6",
     "xo": "^0.17.1"
   },
-  "main": "index.js",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "bin": {
     "blahblahblah": "./cli.js"
   },
   "scripts": {
-    "postinstall": "pkgwrap --postinstall",
-    "test": "pkgwrap --testing",
-    "report": "pkgwrap --reporting",
-    "coverage": "pkgwrap --coverage"
+    "build": "./node_modules/.bin/pkgwrap --build",
+    "postinstall": "./node_modules/.bin/pkgwrap  --postinstall",
+    "test": "./node_modules/.bin/pkgwrap  --testing",
+    "report": "./node_modules/.bin/pkgwrap  --reporting",
+    "coverage": "./node_modules/.bin/pkgwrap  --coverage"
   },
   "xo": {
     "env": {
@@ -50,19 +54,10 @@
     },
     "global": [
       "window",
-      "describe",
-      "it",
       "JSON"
     ],
     "rules": {
       "space-before-function-paren": "off",
-      "no-multiple-empty-lines": [
-        "error",
-        {
-          "max": 2,
-          "maxEOF": 1
-        }
-      ],
       "unicorn/filename-case": [
         "error",
         {
@@ -74,5 +69,8 @@
         "as-needed"
       ]
     }
+  },
+  "ava": {
+    "concurrency": 5
   }
 }
