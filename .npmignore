@@ -8,8 +8,11 @@ tslint.json
 .gitignore
 .gitattributes
 
-index.ts
-test.ts
+
+coverage
+.nyc_output
+*.ts
+!*.d.ts
 test.js
 test.d.ts
 
