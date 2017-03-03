@@ -17,60 +17,36 @@
     "node": ">=7.5"
   },
   "dependencies": {
+    "@types/fs-extra": "0.0.37",
+    "@types/node": "^7.0.5",
+    "@types/ssh2": "^0.5.35",
+    "@types/uuid": "^2.0.29",
     "expand-home-dir": "0.0.3",
     "fs-extra": "^2.0.0",
     "lodash": "^4.17.4",
-    "object-assign": "^4.1.1",
-    "util.rstrip": "0.0.7",
-    "uuid": "^3.0.1",
-    "yargs": "^6.5.0"
+    "ssh2": "0.5.4",
+    "util.rstrip": "0.0.10",
+    "util.wait": "0.0.5",
+    "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "ava": "^0.18.1",
-    "coveralls": "^2.11.15",
+    "@types/mocha": "^2.2.39",
+    "coveralls": "^2.11.16",
+    "mocha": "^3.2.0",
     "nyc": "^10.1.2",
-    "tslint": "^4.4.2",
-    "typescript": "^2.1.6",
-    "util.pkgwrap": "0.0.6",
-    "xo": "^0.17.1"
+    "tslint": "^4.5.1",
+    "typescript": "^2.2.1",
+    "util.pkgwrap": "0.0.11"
   },
   "main": "./index.js",
   "types": "./index.d.ts",
-  "bin": {
-    "blahblahblah": "./cli.js"
-  },
   "scripts": {
+    "all": "npm run lint && npm run build && npm test && npm run report",
     "build": "./node_modules/.bin/pkgwrap --build",
-    "postinstall": "./node_modules/.bin/pkgwrap  --postinstall",
-    "test": "./node_modules/.bin/pkgwrap  --testing",
-    "report": "./node_modules/.bin/pkgwrap  --reporting",
-    "coverage": "./node_modules/.bin/pkgwrap  --coverage"
-  },
-  "xo": {
-    "env": {
-      "browser": true,
-      "node": true,
-      "es6": true
-    },
-    "global": [
-      "window",
-      "JSON"
-    ],
-    "rules": {
-      "space-before-function-paren": "off",
-      "unicorn/filename-case": [
-        "error",
-        {
-          "case": "snakeCase"
-        }
-      ],
-      "arrow-parens": [
-        "error",
-        "as-needed"
-      ]
-    }
-  },
-  "ava": {
-    "concurrency": 5
+    "coverage": "./node_modules/.bin/pkgwrap --coverage",
+    "lint": "./node_modules/.bin/pkgwrap --lint",
+    "postinstall": "./node_modules/.bin/pkgwrap --postinstall",
+    "report": "./node_modules/.bin/pkgwrap --reporting",
+    "test": "./node_modules/.bin/pkgwrap --testing"
   }
 }
