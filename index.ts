@@ -24,14 +24,17 @@
 'use strict';
 
 import * as proc from 'child_process';
-import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import * as fs from 'fs-extra';
+import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import {rstrip} from 'util.rstrip';
-import {wait} from 'util.wait';
-import {Semaphore} from 'util.wait';
+import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
 const home = require('expand-home-dir');
+const pkg = require('./package.json');
+
+export let nil: Function = () => {
+};
 
 export interface IScaffoldOpts extends ConnectConfig {
 	stub?: boolean;
@@ -57,6 +60,7 @@ export interface ICommandOpts {
 /** an instance of the Scaffold class */
 export class Scaffold {
 
+	private _debug: boolean = pkg.debug;
 	private _cmds: string[] = [];
 	private _config: IScaffoldOpts = null;
 	private _history: string[] = [];
@@ -70,12 +74,10 @@ export class Scaffold {
 	 * SSH.  If the config is empty, then the commands are all executed on the
 	 * local host instead.
 	 * @param opts {IScaffoldOpts} holds SSH connection information from config.json
-	 * @param debug {boolean} if true, output is saved/printed
 	 * @constructor
 	 */
-	constructor(opts?: IScaffoldOpts, debug: boolean = false) {
+	constructor(opts?: IScaffoldOpts) {
 		opts = Object.assign({
-			debug: debug,
 			stub: false,
 			port: 22,
 			privateKeyFile: '~/.ssh/id_rsa',
@@ -159,9 +161,9 @@ export class Scaffold {
 		opts = Object.assign({mode: '755', owner: 'root', group: 'root'}, opts);
 
 		let id: string = uuid.v4();
-		let cmd = `sudo -E tee ${rfile} <<-'${id}'\n`;
+		let cmd = `tee ${rfile} <<-'${id}'\n`;
 		cmd += fs.readFileSync(lfile);
-		cmd += '\n${id}';
+		cmd += `\n${id}`;
 		this.sudo(cmd);
 		this.sudo(`chown -R ${opts.owner}.${opts.group} ${rfile}`);
 		this.sudo(`chmod -R ${opts.mode} ${rfile}`);
@@ -240,7 +242,7 @@ export class Scaffold {
 		return this._output;
 	}
 
-	private runLocal(opts: ICommandOpts, cb: Function = () => {}, self = this) {
+	private runLocal(opts: ICommandOpts, cb: Function = nil, self = this) {
 		let pos: number = 1;
 		while (this._cmds.length > 0) {
 			let cmd: string = this._cmds.shift();
@@ -256,7 +258,7 @@ export class Scaffold {
 			if (!this._config.stub) {
 				try {
 					ret = proc.execSync(cmd, {stdio: [0, 1, 2]}).toString();
-				} catch(err) {
+				} catch (err) {
 					return cb(err, null);
 				}
 			}
@@ -269,7 +271,7 @@ export class Scaffold {
 		return cb(null, self);
 	}
 
-	private runRemote(opts: ICommandOpts, cb: Function = () => {}, self = this) {
+	private runRemote(opts: ICommandOpts, cb: Function = nil, self = this) {
 		console.log(opts);
 		opts = Object.assign({verbose: true, quiet: false}, opts);
 		let pos = 1;
@@ -277,10 +279,10 @@ export class Scaffold {
 		let conn: Client = null;
 		if (!self._config.stub) {
 			conn = new Client();
-	    }
+		}
 
-		function exec(conn: Client, cmd: string) {
-			if (opts.verbose || self._config.debug) {
+		function exec(ssh: Client, cmd: string) {
+			if (opts.verbose || self._debug) {
 				self.sanitize(`Executing[${pos++}]: ${cmd}`);
 			}
 
@@ -290,24 +292,24 @@ export class Scaffold {
 				self._semaphore.decrement();
 
 				if (self._cmds.length > 0) {
-					exec(conn, self._cmds.shift());
+					exec(ssh, self._cmds.shift());
 				}
 			} else {
-				conn.exec(cmd, {pty: true}, (err: Error, stream) => {
+				ssh.exec(cmd, {pty: true}, (err: Error, stream) => {
 					if (err) {
 						return cb(err, self);
 					}
 
-					stream.on('close', (err: Error, signal: ClientChannel) => {
-						if (err) {
-							return cb(new Error(`command failed: ${err.message}, signal: ${signal}`), self);
+					stream.on('close', (clerr: Error, signal: ClientChannel) => {
+						if (clerr) {
+							return cb(new Error(`command failed: ${clerr.message}, signal: ${signal}`), self);
 						}
 						self._semaphore.decrement();
 
 						if (self._cmds.length > 0) {
 							// recursively call run to process the next item in the
 							// queue.
-							exec(conn, self._cmds.shift());
+							exec(ssh, self._cmds.shift());
 						}
 					}).on('data', (data: Buffer) => {
 						if (!opts.quiet) {
@@ -321,7 +323,7 @@ export class Scaffold {
 		}
 
 		if (!self._config.stub) {
-			conn.on('ready', function () {
+			conn.on('ready', () => {
 				exec(conn, self._cmds.shift());
 			}).connect(self._config);
 		} else {
@@ -355,7 +357,7 @@ export class Scaffold {
 		lines.forEach((line) => {
 			console.log(rstrip(line.toString()));
 
-			if (self._config.debug) {
+			if (self._debug) {
 				self._output += (line + '\n');
 			}
 		});
