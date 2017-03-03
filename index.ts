@@ -6,14 +6,15 @@
  * Each of the calls to run, sudo, etc, are sent to a command list queue.  Once
  * the commands are queued up, then the `go` function is called to process
  * the commands in order.  This class is used to group together dependent
- * functions.  It will run async.  Each grouping of commands should be a
- * separate instantiation of the Scaffold class.
+ * functions.  Each grouping of commands should be a separate instantiation of
+ * the Scaffold class.
  *
  * e.g.
  *
  *     let scaffold = new Scaffold(config.ssh);
  *
- *     scaffold.run('uname -a')
+ *     scaffold
+ *         .run('uname -a')
  *         .sudo('env | sort')
  *         .go();
  *
@@ -23,25 +24,22 @@
 'use strict';
 
 import * as proc from 'child_process';
-// import {Client} from 'ssh2';
+import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import * as fs from 'fs-extra';
 import {rstrip} from 'util.rstrip';
 import {wait} from 'util.wait';
+import {Semaphore} from 'util.wait';
 import * as uuid from 'uuid';
 
 const home = require('expand-home-dir');
 
-export interface IScaffoldOpts {
+export interface IScaffoldOpts extends ConnectConfig {
 	stub?: boolean;
-	debug?: boolean;
 	hostname?: string;
-	host?: string;
-	port?: number;
-	username?: string;
 	privateKeyFile?: string;
-	privateKey?: string;
 	publicKeyFile?: string;
 	publicKey?: string;
+	timeout?: number;
 }
 
 export interface ICommandOpts {
@@ -64,6 +62,7 @@ export class Scaffold {
 	private _history: string[] = [];
 	private _local: boolean = false;
 	private _output: string = '';
+	private _semaphore: Semaphore = null;
 
 	/**
 	 * The constructor function for the scaffolding.  This takes a single parameter
@@ -71,17 +70,20 @@ export class Scaffold {
 	 * SSH.  If the config is empty, then the commands are all executed on the
 	 * local host instead.
 	 * @param opts {IScaffoldOpts} holds SSH connection information from config.json
+	 * @param debug {boolean} if true, output is saved/printed
 	 * @constructor
 	 */
-	constructor(opts?: IScaffoldOpts) {
+	constructor(opts?: IScaffoldOpts, debug: boolean = false) {
 		opts = Object.assign({
+			debug: debug,
 			stub: false,
-			debug: false,
 			port: 22,
 			privateKeyFile: '~/.ssh/id_rsa',
-			publicKeyFle: '~/.ssh/id_rsa.pub'
+			publicKeyFile: '~/.ssh/id_rsa.pub',
+			timeout: 3600
 		}, opts);
 
+		this._semaphore = new Semaphore(opts.timeout);
 		this._config = opts;
 		this._local = false;
 		if (opts.host != null) {
@@ -117,6 +119,7 @@ export class Scaffold {
 			cmd = 'sudo -E ' + cmd;
 		}
 
+		this._semaphore.increment();
 		this._cmds.push(cmd);
 
 		wait(opts.delay)
@@ -219,13 +222,9 @@ export class Scaffold {
 		}, opts);
 
 		if (this._local) {
-			this.runLocal(opts);
+			this.runLocal(opts, cb);
 		} else {
-			this.runRemote(opts);
-		}
-
-		if (cb != null && typeof cb === 'function') {
-			cb();
+			this.runRemote(opts, cb);
 		}
 	}
 
@@ -241,12 +240,13 @@ export class Scaffold {
 		return this._output;
 	}
 
-	private runLocal(opts: ICommandOpts) {
+	private runLocal(opts: ICommandOpts, cb: Function = () => {}, self = this) {
 		let pos: number = 1;
 		while (this._cmds.length > 0) {
 			let cmd: string = this._cmds.shift();
+			this._semaphore.decrement();
 
-			if (opts.verbose || this._config.debug) {
+			if (opts.verbose) {
 				this.sanitize(`Executing[${pos++}]: ${cmd}`);
 			}
 
@@ -254,7 +254,11 @@ export class Scaffold {
 
 			let ret: string = '';
 			if (!this._config.stub) {
-				ret = proc.execSync(cmd, {stdio: [0, 1, 2]}).toString();
+				try {
+					ret = proc.execSync(cmd, {stdio: [0, 1, 2]}).toString();
+				} catch(err) {
+					return cb(err, null);
+				}
 			}
 
 			if (!opts.quiet && ret !== null && ret.length > 0) {
@@ -262,78 +266,97 @@ export class Scaffold {
 			}
 		}
 
-		console.log('');
+		return cb(null, self);
 	}
 
-	private runRemote(opts: ICommandOpts) {
+	private runRemote(opts: ICommandOpts, cb: Function = () => {}, self = this) {
 		console.log(opts);
-		// opts = Object.assign({verbose: true, quiet: false}, opts);
-		// let idx = 0;
-		// let conn = new Client();
-		// let self = this;
-		// let out = '';
-		//
-		// function exec(conn: Client, cmd: string) {
-		// 	if (opts.verbose) {
-		// 		this.sanitize(`Executing[${idx}]: ${cmd}`);
-		// 	}
-		//
-		// 	conn.exec(cmd, {pty: true}, (err: Error, stream) => {
-		// 		if (err) {
-		// 			throw err;
-		// 		}
-		//
-		// 		stream.on('close', (code, signal) => {
-		// 			if (code !== 0 && typeof code !== 'undefined') {
-		// 				throw new Error(`command failed: ${code}, signal: ${signal}`);
-		// 			}
-		//
-		// 			idx++;
-		//
-		// 			if (idx >= self._cmds.length) {
-		// 				conn.end();
-		//
-		// 				// reset the command array so it can be used again.
-		// 				self._cmds.length = 0;
-		//
-		// 				if (done && typeof done === 'function') {
-		// 					done(out);
-		// 				}
-		// 			} else {
-		// 				// recursively call run to process the next item in the
-		// 				// queue.
-		// 				exec(conn, self._cmds[idx]);
-		// 			}
-		// 		}).on('data', (data) => {
-		// 			if (!opts.quiet) {
-		// 				this.sanitize(data);
-		// 				out += data.toString();
-		// 			}
-		// 		}).stderr.on('data', (data) => {
-		// 			tools.output(data);
-		// 			out += data.toString();
-		// 		});
-		// 	});
-		// }
-		//
-		// conn.on('ready', function () {
-		// 	exec(conn, self._cmds[idx]);
-		// }).connect(this._config);
+		opts = Object.assign({verbose: true, quiet: false}, opts);
+		let pos = 1;
+
+		let conn: Client = null;
+		if (!self._config.stub) {
+			conn = new Client();
+	    }
+
+		function exec(conn: Client, cmd: string) {
+			if (opts.verbose || self._config.debug) {
+				self.sanitize(`Executing[${pos++}]: ${cmd}`);
+			}
+
+			self._history.push(cmd);
+
+			if (self._config.stub) {
+				self._semaphore.decrement();
+
+				if (self._cmds.length > 0) {
+					exec(conn, self._cmds.shift());
+				}
+			} else {
+				conn.exec(cmd, {pty: true}, (err: Error, stream) => {
+					if (err) {
+						return cb(err, self);
+					}
+
+					stream.on('close', (err: Error, signal: ClientChannel) => {
+						if (err) {
+							return cb(new Error(`command failed: ${err.message}, signal: ${signal}`), self);
+						}
+						self._semaphore.decrement();
+
+						if (self._cmds.length > 0) {
+							// recursively call run to process the next item in the
+							// queue.
+							exec(conn, self._cmds.shift());
+						}
+					}).on('data', (data: Buffer) => {
+						if (!opts.quiet) {
+							self.sanitize(data.toString());
+						}
+					}).stderr.on('data', (data: Buffer) => {
+						self.sanitize(data.toString());
+					});
+				});
+			}
+		}
+
+		if (!self._config.stub) {
+			conn.on('ready', function () {
+				exec(conn, self._cmds.shift());
+			}).connect(self._config);
+		} else {
+			exec(conn, self._cmds.shift());
+		}
+
+		this._semaphore.wait()
+			.then(() => {
+				if (!self._config.stub) {
+					conn.end();
+				}
+
+				self.sanitize('End of remote processing');
+			})
+			.catch((err: string) => {
+				return cb(err, self);
+			});
+
+		cb(null, self);
 	}
 
 	/**
 	 * Takes a data buffer of output bytes, converts it to a string and then splits
 	 * it on newlines for output to the terminal.
 	 * @param buffer {string} the output bytes to convert and print to log.
+	 * @param self {Scaffold} a reference to the Scaffold instance
 	 */
-	private sanitize(buffer: string) {
+	private sanitize(buffer: string, self = this) {
 		let lines = rstrip(buffer).split(/\r?\n|\r/);
 
 		lines.forEach((line) => {
 			console.log(rstrip(line.toString()));
 
-			if (this._config.debug) {
-				this._output += line;
+			if (self._config.debug) {
+				self._output += (line + '\n');
 			}
 		});
 	}
