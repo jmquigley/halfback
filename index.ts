@@ -219,6 +219,11 @@ export class Scaffold {
 	};
 
 	public go(opts?: ICommandOpts, cb?: Function) {
+		if (typeof opts === 'function') {
+			cb = opts;
+			opts = null;
+		}
+
 		opts = Object.assign({
 			verbose: false
 		}, opts);
@@ -337,12 +342,11 @@ export class Scaffold {
 				}
 
 				self.sanitize('End of remote processing');
+				cb(null, self);
 			})
 			.catch((err: string) => {
 				return cb(err, self);
 			});
-
-		cb(null, self);
 	}
 
 	/**
