@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "author": "jmquigley <jmquigley@outlook.com>",
   "description": "A library to simplify SSH interactions with a remote server. It can be used to run commands, change config, create files, etc.",
-  "debug": true,
+  "debug": false,
   "private": false,
   "license": "MIT",
   "repository": {
@@ -36,6 +36,7 @@
     "nyc": "^10.1.2",
     "tslint": "^4.5.1",
     "typescript": "^2.2.1",
+    "util.fixture": "0.0.31",
     "util.pkgwrap": "0.0.11"
   },
   "main": "./index.js",

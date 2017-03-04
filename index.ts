@@ -277,7 +277,6 @@ export class Scaffold {
 	}
 
 	private runRemote(opts: ICommandOpts, cb: Function = nil, self = this) {
-		console.log(opts);
 		opts = Object.assign({verbose: true, quiet: false}, opts);
 		let pos = 1;
 
@@ -356,14 +355,12 @@ export class Scaffold {
 	 * @param self {Scaffold} a reference to the Scaffold instance
 	 */
 	private sanitize(buffer: string, self = this) {
-		let lines = rstrip(buffer).split(/\r?\n|\r/);
-
-		lines.forEach((line) => {
-			console.log(rstrip(line.toString()));
-
-			if (self._debug) {
+		if (self._debug) {
+			let lines = rstrip(buffer).split(/\r?\n|\r/);
+			lines.forEach((line) => {
+				console.log(rstrip(line.toString()));
 				self._output += (line + '\n');
-			}
-		});
+			});
+		}
 	}
 }
