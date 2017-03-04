@@ -1,26 +1,3 @@
-/**
- * This module contains functions for simplifying SSH interactions with the
- * remote production server.  It can be used to run commands, change config,
- * create files, etc.
- *
- * Each of the calls to run, sudo, etc, are sent to a command list queue.  Once
- * the commands are queued up, then the `go` function is called to process
- * the commands in order.  This class is used to group together dependent
- * functions.  Each grouping of commands should be a separate instantiation of
- * the Scaffold class.
- *
- * e.g.
- *
- *     let scaffold = new Scaffold(config.ssh);
- *
- *     scaffold
- *         .run('uname -a')
- *         .sudo('env | sort')
- *         .go();
- *
- * @module scaffold
- */
-
 'use strict';
 
 import * as proc from 'child_process';
@@ -73,7 +50,7 @@ export class Scaffold {
 	 * that represents the configuration required to connect to a remote host using
 	 * SSH.  If the config is empty, then the commands are all executed on the
 	 * local host instead.
-	 * @param opts {IScaffoldOpts} holds SSH connection information from config.json
+	 * @param [opts] {IScaffoldOpts} holds SSH connection information from config.json
 	 * @constructor
 	 */
 	constructor(opts?: IScaffoldOpts) {
@@ -218,6 +195,15 @@ export class Scaffold {
 		return this;
 	};
 
+	/**
+	 * Starts the processing of the command queue.
+	 * @param [opts] {ICommandOpts} a set of commands used to process this queue.
+	 *
+	 *     - verbose: {boolean} if true, then print more output, otherwise silent
+	 *
+	 * @param [cb] {Function} a callback function that is executed when this process
+	 * completes.  It will be executed on success or failure.
+	 */
 	public go(opts?: ICommandOpts, cb?: Function) {
 		if (typeof opts === 'function') {
 			cb = opts;
@@ -247,6 +233,16 @@ export class Scaffold {
 		return this._output;
 	}
 
+	/**
+	 * Runs the given command queue on the local host.
+	 * @param opts {ICommandOpts} the options that are used to run all commands
+	 * in the queue.
+	 * @param cb {Function} a callback function that is executed when the
+	 * remote execution finishes or has an error.
+	 * @param self {Scaffold} a reference to the Scaffold instance.
+	 * @returns the result of the given callback function.
+	 * @private
+	 */
 	private runLocal(opts: ICommandOpts, cb: Function = nil, self = this) {
 		let pos: number = 1;
 		while (this._cmds.length > 0) {
@@ -276,6 +272,16 @@ export class Scaffold {
 		return cb(null, self);
 	}
 
+	/**
+	 * Runs the given command queue on the remote server.
+	 * @param opts {ICommandOpts} the options that are used to run all commands
+	 * in the queue.
+	 * @param cb {Function} a callback function that is executed when the
+	 * remote execution finishes or has an error.
+	 * @param self {Scaffold} a reference to the Scaffold instance.
+	 * @returns the result of the given callback function.
+	 * @private
+	 */
 	private runRemote(opts: ICommandOpts, cb: Function = nil, self = this) {
 		opts = Object.assign({verbose: true, quiet: false}, opts);
 		let pos = 1;
@@ -353,6 +359,7 @@ export class Scaffold {
 	 * it on newlines for output to the terminal.
 	 * @param buffer {string} the output bytes to convert and print to log.
 	 * @param self {Scaffold} a reference to the Scaffold instance
+	 * @private
 	 */
 	private sanitize(buffer: string, self = this) {
 		if (self._debug) {

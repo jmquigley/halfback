@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Documentation Index</title>
+
+	<!--[if lt IE 9]>
+	<script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<![endif]-->
+	<link type="text/css" rel="stylesheet" href="styles/sunlight.default.css">
+
+	<link type="text/css" rel="stylesheet" href="styles/site.cerulean.css">
+
+</head>
+
+<body>
+
+<div class="navbar navbar-default navbar-fixed-top ">
+<div class="container">
+	<div class="navbar-header">
+		<a class="navbar-brand" href="index.html">Documentation</a>
+		<button class="navbar-toggle" type="button" data-toggle="collapse" data-target="#topNavigation">
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+			<span class="icon-bar"></span>
+        </button>
+	</div>
+	<div class="navbar-collapse collapse" id="topNavigation">
+		<ul class="nav navbar-nav">
+			
+			<li class="dropdown">
+				<a href="classes.list.html" class="dropdown-toggle" data-toggle="dropdown">Classes<b class="caret"></b></a>
+				<ul class="dropdown-menu ">
+					<li><a href="Scaffold.html">Scaffold</a></li>
+				</ul>
+			</li>
+			
+		</ul>
+        
+            <div class="col-sm-3 col-md-3">
+                <form class="navbar-form" role="search">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="Search" name="q" id="search-input">
+                        <div class="input-group-btn">
+                            <button class="btn btn-default" id="search-submit"><i class="glyphicon glyphicon-search"></i></button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        
+	</div>
+
+</div>
+</div>
+
+
+<div class="container" id="toc-content">
+<div class="row">
+
+	
+	<div class="col-md-8">
+	
+		<div id="main">
+			
+
+	
+	
+
+
+
+
+
+
+
+
+
+
+
+	
+	
+
+
+
+
+
+    <section class="readme-section">
+        <article><h1>util.scaffold <a href="https://travis-ci.org/jmquigley/util.scaffold"><img src="https://travis-ci.org/jmquigley/util.scaffold.svg?branch=master" alt="Build Status"></a>  <a href="https://palantir.github.io/tslint/"><img src="https://img.shields.io/badge/code_style-TSlint-5ed9c7.svg" alt="tslint code style"></a> <a href="https://www.npmjs.com/package/util.scaffold"><img src="https://img.shields.io/npm/v/util.scaffold.svg" alt="NPM"></a> <a href="https://coveralls.io/github/jmquigley/util.scaffold?branch=master"><img src="https://coveralls.io/repos/github/jmquigley/util.scaffold/badge.svg?branch=master" alt="Coverage Status"></a></h1><blockquote>
+<p>A library to simplify SSH interactions with a remote server.  It can be used to run commands, change config, create files, etc.</p>
+</blockquote>
+<p>This module contains functions for simplifying SSH interactions with the remote production server.  It can be used to run commands, change config, create files, etc.</p>
+<p>Each of the calls to run, sudo, etc, are sent to a command list queue.  Once the commands are queued up, then the <code>go</code> function is called to process the commands in order.  This class is used to group together dependent functions.  Each grouping of commands should be a separate instantiation of the Scaffold class.  e.g.</p>
+<pre class="prettyprint source"><code>let scaffold = new Scaffold(config.ssh);
+
+scaffold
+    .run('uname -a')
+    .sudo('env | sort')
+    .go();</code></pre><p>Note that coverage is difficult with this module.  It requires a host that can be used connected to via SSH and that the user has full control over that host.</p>
+<h2>Installation</h2><p>To install as a global package:</p>
+<pre class="prettyprint source"><code>$ npm install --global util.scaffold</code></pre><p>To install as an application dependency:</p>
+<pre class="prettyprint source"><code>$ npm install --save util.scaffold</code></pre><p>To build the app and run all tests:</p>
+<pre class="prettyprint source"><code>$ npm run all</code></pre><h2>Usages</h2><p>To connect to a remote server and execute a set of commands:</p>
+<pre class="prettyprint source"><code>const Scaffold = require('util.scaffold').Scaffold;
+
+let config = {
+    &quot;hostname&quot;: &quot;example.com&quot;,
+    &quot;host&quot;: &quot;192.168.1.42&quot;,
+    &quot;port&quot;: 22,
+    &quot;username&quot;: &quot;centos&quot;,
+    &quot;privateKeyFile&quot;: &quot;~/.ssh/id_rsa&quot;,
+    &quot;publicKeyFile&quot;: &quot;~/.ssh/id_rsa.pub&quot;,
+};
+
+let scaffold = new Scaffold(config);
+scaffold
+    .run('uname -a')
+    .sudo('env | sort')
+    .mkdir('/var/log/myapp', {mode: '700', owner: 'root', group: 'docker'})
+    .put('/tmp/file1.txt', '/tmp/file2.txt')
+    .go((err) => {
+        if (err) {
+            console.error(err);
+            return;
+        }
+
+        console.log('Done.');
+    })</code></pre><p>An instance of the <a href="docs/index.md">Scaffold</a> class is created.  Methods can be chained to this instance to queue commands.  The first command above runs the uname command on the remote server.  It runs it as the <code>centos</code> user.  The second command dumps a sorted list of environment variables using sudo.  This assumes that the SSH user <code>centos</code> has sudo permissions (or this command will fail).  The third chained command creates a directory named <code>/var/log/myapp</code> and sets the permissions/ownership of the directory.  The fourth command takes a file on the local machine and moves it to the remote machine.  It works with text files only.  All four of these commands are added to a queue.  Execution starts when the <code>go</code> command is called.  It processes each command in order.  When it finishes a callback is executed.  It uses the first parameter as an <code>err</code> convention.</p>
+<h2>API</h2><p>The module is composed of one class named <a href="docs/index.md">Scaffold</a>.  It has the following public functions:</p>
+<ul>
+<li><a href="docs/index#Scaffold+copy">copy</a> - copies a file on the remote machine from one location to another on the remote machine.</li>
+<li><a href="docs/index#Scaffold+go">go</a> - starts the processing of the command queue.</li>
+<li><a href="docs/index#Scaffold+mkdir">mkdir</a> - creates a directory on the remote host.</li>
+<li><a href="docs/index#Scaffold+put">put</a> - takes a file from the local host and puts it on the remote host.</li>
+<li><a href="docs/index#Scaffold+run">run</a> - runs a command on the remote host.</li>
+<li><a href="docs/index#Scaffold+sudo">sudo</a> - runs a command on the remote host using sudo.</li>
+</ul></article>
+    </section>
+
+
+
+
+
+
+
+		</div>
+	</div>
+
+	<div class="clearfix"></div>
+
+	
+		<div class="col-md-3">
+			<div id="toc" class="col-md-3 hidden-xs hidden-sm hidden-md"></div>
+		</div>
+	
+
+</div>
+</div>
+
+
+    <div class="modal fade" id="searchResults">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">Search results</h4>
+          </div>
+          <div class="modal-body"></div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div>
+
+
+<footer>
+
+
+<span class="jsdoc-message">
+	Documentation generated by <a href="https://github.com/jsdoc3/jsdoc">JSDoc 3.4.3</a>
+	
+		on March 4th 2017, 12:06:50 am
+	
+	using the <a href="https://github.com/docstrap/docstrap">DocStrap template</a>.
+</span>
+</footer>
+
+<script src="scripts/docstrap.lib.js"></script>
+<script src="scripts/toc.js"></script>
+
+    <script type="text/javascript" src="scripts/fulltext-search-ui.js"></script>
+
+
+<script>
+$( function () {
+	$( "[id*='$']" ).each( function () {
+		var $this = $( this );
+
+		$this.attr( "id", $this.attr( "id" ).replace( "$", "__" ) );
+	} );
+
+	$( ".tutorial-section pre, .readme-section pre, pre.prettyprint.source" ).each( function () {
+		var $this = $( this );
+
+		var example = $this.find( "code" );
+		exampleText = example.html();
+		var lang = /{@lang (.*?)}/.exec( exampleText );
+		if ( lang && lang[1] ) {
+			exampleText = exampleText.replace( lang[0], "" );
+			example.html( exampleText );
+			lang = lang[1];
+		} else {
+			var langClassMatch = example.parent()[0].className.match(/lang\-(\S+)/);
+			lang = langClassMatch ? langClassMatch[1] : "javascript";
+		}
+
+		if ( lang ) {
+
+			$this
+			.addClass( "sunlight-highlight-" + lang )
+			.addClass( "linenums" )
+			.html( example.html() );
+
+		}
+	} );
+
+	Sunlight.highlightAll( {
+		lineNumbers : true,
+		showMenu : true,
+		enableDoclinks : true
+	} );
+
+	$.catchAnchorLinks( {
+        navbarOffset: 10
+	} );
+	$( "#toc" ).toc( {
+		anchorName  : function ( i, heading, prefix ) {
+			return $( heading ).attr( "id" ) || ( prefix + i );
+		},
+		selectors   : "#toc-content h1,#toc-content h2,#toc-content h3,#toc-content h4",
+		showAndHide : false,
+		smoothScrolling: true
+	} );
+
+	$( "#main span[id^='toc']" ).addClass( "toc-shim" );
+	$( '.dropdown-toggle' ).dropdown();
+
+    $( "table" ).each( function () {
+      var $this = $( this );
+      $this.addClass('table');
+    } );
+
+} );
+</script>
+
+
+
+<!--Navigation and Symbol Display-->
+
+
+<!--Google Analytics-->
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function() {
+            SearcherDisplay.init();
+        });
+    </script>
+
+
+</body>
+</html>
