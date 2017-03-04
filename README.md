@@ -70,10 +70,10 @@ An instance of the [Scaffold](docs/index.md) class is created.  Methods can be c
 ## API
 The module is composed of one class named [Scaffold](docs/index.md).  It has the following public functions:
 
-- [copy](docs/index#Scaffold+copy) - copies a file on the remote machine from one location to another on the remote machine.
-- [go](docs/index#Scaffold+go) - starts the processing of the command queue.
-- [mkdir](docs/index#Scaffold+mkdir) - creates a directory on the remote host.
-- [put](docs/index#Scaffold+put) - takes a file from the local host and puts it on the remote host.
-- [run](docs/index#Scaffold+run) - runs a command on the remote host.
-- [sudo](docs/index#Scaffold+sudo) - runs a command on the remote host using sudo.
+- [copy](docs/index.md#Scaffold+copy) - copies a file on the remote machine from one location to another on the remote machine.
+- [go](docs/index.md#Scaffold+go) - starts the processing of the command queue.
+- [mkdir](docs/index.md#Scaffold+mkdir) - creates a directory on the remote host.
+- [put](docs/index.md#Scaffold+put) - takes a file from the local host and puts it on the remote host.
+- [run](docs/index.md#Scaffold+run) - runs a command on the remote host.
+- [sudo](docs/index.md#Scaffold+sudo) - runs a command on the remote host using sudo.
 
