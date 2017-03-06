@@ -320,10 +320,12 @@ export class Scaffold {
 						}
 					}).on('data', (data: Buffer) => {
 						if (!opts.quiet) {
-							sanitize(data, true);
+							let out = sanitize(data, true);
+							self._output += out.join('\n');
 						}
 					}).stderr.on('data', (data: Buffer) => {
-						sanitize(data, true);
+						let out = sanitize(data, true);
+						self._output += out.join('\n');
 					});
 				});
 			}
