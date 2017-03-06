@@ -3,15 +3,12 @@
 import * as proc from 'child_process';
 import * as fs from 'fs-extra';
 import {Client, ClientChannel, ConnectConfig} from 'ssh2';
-import {rstrip} from 'util.rstrip';
+import {nil, sanitize} from 'util.toolbox';
 import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
 const home = require('expand-home-dir');
 const pkg = require('./package.json');
-
-export let nil: Function = () => {
-};
 
 export interface IScaffoldOpts extends ConnectConfig {
 	stub?: boolean;
@@ -189,7 +186,7 @@ export class Scaffold {
 		if (fs.existsSync(src)) {
 			this.run(`cp ${(opts.recursive) ? '-r' : ''} ${src} ${dst}`, {sudo: opts.sudo});
 		} else {
-			this.sanitize(`No copy.  ${src} does not exist`);
+			console.log(`No copy.  ${src} does not exist`);
 		}
 
 		return this;
@@ -250,7 +247,7 @@ export class Scaffold {
 			this._semaphore.decrement();
 
 			if (opts.verbose) {
-				this.sanitize(`Executing[${pos++}]: ${cmd}`);
+				sanitize(`Executing[${pos++}]: ${cmd}`, true);
 			}
 
 			this._history.push(cmd);
@@ -265,7 +262,7 @@ export class Scaffold {
 			}
 
 			if (!opts.quiet && ret !== null && ret.length > 0) {
-				this.sanitize(ret);
+				sanitize(ret, true);
 			}
 		}
 
@@ -293,7 +290,7 @@ export class Scaffold {
 
 		function exec(ssh: Client, cmd: string) {
 			if (opts.verbose || self._debug) {
-				self.sanitize(`Executing[${pos++}]: ${cmd}`);
+				sanitize(`Executing[${pos++}]: ${cmd}`, true);
 			}
 
 			self._history.push(cmd);
@@ -323,10 +320,10 @@ export class Scaffold {
 						}
 					}).on('data', (data: Buffer) => {
 						if (!opts.quiet) {
-							self.sanitize(data.toString());
+							sanitize(data, true);
 						}
 					}).stderr.on('data', (data: Buffer) => {
-						self.sanitize(data.toString());
+						sanitize(data, true);
 					});
 				});
 			}
@@ -346,28 +343,11 @@ export class Scaffold {
 					conn.end();
 				}
 
-				self.sanitize('End of remote processing');
+				sanitize('End of remote processing', true);
 				cb(null, self);
 			})
 			.catch((err: string) => {
 				return cb(err, self);
 			});
-	}
-
-	/**
-	 * Takes a data buffer of output bytes, converts it to a string and then splits
-	 * it on newlines for output to the terminal.
-	 * @param buffer {string} the output bytes to convert and print to log.
-	 * @param self {Scaffold} a reference to the Scaffold instance
-	 * @private
-	 */
-	private sanitize(buffer: string, self = this) {
-		if (self._debug) {
-			let lines = rstrip(buffer).split(/\r?\n|\r/);
-			lines.forEach((line) => {
-				console.log(rstrip(line.toString()));
-				self._output += (line + '\n');
-			});
-		}
 	}
 }

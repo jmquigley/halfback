@@ -6,17 +6,17 @@ an instance of the Scaffold class
 **Kind**: global class  
 
 * [Scaffold](#Scaffold)
-    * [new Scaffold(opts)](#new_Scaffold_new)
+    * [new Scaffold([opts])](#new_Scaffold_new)
     * [.run(cmd, opts)](#Scaffold+run)
     * [.sudo(cmd, opts)](#Scaffold+sudo)
     * [.put(lfile, rfile, opts)](#Scaffold+put) ⇒ <code>[Scaffold](#Scaffold)</code>
     * [.mkdir(directory, opts)](#Scaffold+mkdir) ⇒ <code>[Scaffold](#Scaffold)</code>
     * [.copy(src, dst, [opts])](#Scaffold+copy) ⇒ <code>[Scaffold](#Scaffold)</code>
-    * [.go(opts, cb)](#Scaffold+go)
+    * [.go([opts], [cb])](#Scaffold+go)
 
 <a name="new_Scaffold_new"></a>
 
-### new Scaffold(opts)
+### new Scaffold([opts])
 The constructor function for the scaffolding.  This takes a single parameter
 that represents the configuration required to connect to a remote host using
 SSH.  If the config is empty, then the commands are all executed on the
@@ -25,7 +25,7 @@ local host instead.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opts | <code>IScaffoldOpts</code> | holds SSH connection information from config.json |
+| [opts] | <code>IScaffoldOpts</code> | holds SSH connection information from config.json |
 
 <a name="Scaffold+run"></a>
 
@@ -97,13 +97,13 @@ same server.
 
 <a name="Scaffold+go"></a>
 
-### scaffold.go(opts, cb)
+### scaffold.go([opts], [cb])
 Starts the processing of the command queue.
 
 **Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
 
 | Param | Type | Description |
 | --- | --- | --- |
-| opts | <code>ICommandOpts</code> | a set of commands used to process this queue.     - verbose: {boolean} if true, then print more output, otherwise silent |
-| cb | <code>function</code> | a callback function that is executed when this process completes.  It will be executed on success or failure. |
+| [opts] | <code>ICommandOpts</code> | a set of commands used to process this queue.     - verbose: {boolean} if true, then print more output, otherwise silent |
+| [cb] | <code>function</code> | a callback function that is executed when this process completes.  It will be executed on success or failure. |
 

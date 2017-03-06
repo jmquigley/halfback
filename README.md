@@ -46,7 +46,7 @@ let config = {
     "port": 22,
     "username": "centos",
     "privateKeyFile": "~/.ssh/id_rsa",
-    "publicKeyFile": "~/.ssh/id_rsa.pub",
+    "publicKeyFile": "~/.ssh/id_rsa.pub"
 };
 
 let scaffold = new Scaffold(config);

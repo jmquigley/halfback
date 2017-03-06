@@ -3,15 +3,11 @@
 import * as assert from 'assert';
 import * as path from 'path';
 import {Fixture} from 'util.fixture';
-import {nil, Scaffold} from '../index';
+import {Scaffold} from '../index';
 
 const pkg = require('../package.json');
 
 describe('Testing Scaffolding', () => {
-
-	before(() => {
-		nil();
-	});
 
 	it('Test the creation of a local scaffold object', () => {
 		let scaffold = new Scaffold({
