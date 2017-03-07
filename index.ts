@@ -25,7 +25,6 @@ export interface ICommandOpts {
 	group?: string;
 	mode?: string;
 	owner?: string;
-	quiet?: boolean;
 	recursive?: boolean;
 	sudo?: boolean;
 	verbose?: boolean;
@@ -61,7 +60,6 @@ export class Scaffold {
 
 		this._semaphore = new Semaphore(opts.timeout);
 		this._config = opts;
-		this._local = false;
 		if (opts.host != null) {
 			opts.privateKey = fs.readFileSync(home(opts.privateKeyFile)).toString();
 			opts.publicKey = fs.readFileSync(home(opts.publicKeyFile)).toString();
@@ -208,7 +206,7 @@ export class Scaffold {
 		}
 
 		opts = Object.assign({
-			verbose: false
+			verbose: true
 		}, opts);
 
 		if (this._local) {
@@ -252,16 +250,16 @@ export class Scaffold {
 
 			this._history.push(cmd);
 
-			let ret: string = '';
+			let ret: string | Buffer = '';
 			if (!this._config.stub) {
 				try {
-					ret = proc.execSync(cmd, {stdio: [0, 1, 2]}).toString();
+					ret = proc.execSync(cmd);
 				} catch (err) {
 					return cb(err, null);
 				}
 			}
 
-			if (!opts.quiet && ret !== null && ret.length > 0) {
+			if (opts.verbose && ret !== null && ret.length > 0) {
 				sanitize(ret, true);
 			}
 		}
@@ -280,7 +278,6 @@ export class Scaffold {
 	 * @private
 	 */
 	private runRemote(opts: ICommandOpts, cb: Function = nil, self = this) {
-		opts = Object.assign({verbose: true, quiet: false}, opts);
 		let pos = 1;
 
 		let conn: Client = null;
@@ -319,7 +316,7 @@ export class Scaffold {
 							exec(ssh, self._cmds.shift());
 						}
 					}).on('data', (data: Buffer) => {
-						if (!opts.quiet) {
+						if (opts.verbose) {
 							let out = sanitize(data, true);
 							self._output += out.join('\n');
 						}

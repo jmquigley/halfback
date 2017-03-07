@@ -3,6 +3,7 @@
 import * as assert from 'assert';
 import * as path from 'path';
 import {Fixture} from 'util.fixture';
+import {isLinux, isMac, isWin} from 'util.toolbox';
 import {Scaffold} from '../index';
 
 const pkg = require('../package.json');
@@ -309,5 +310,39 @@ describe('Testing Scaffolding', () => {
 		assert(scaffold.history[0] === 'uname');
 		assert(scaffold.history[1] === 'env | sort');
 		assert(scaffold.history[2] === 'sudo -E ls /usr/bin');
+	});
+
+	it('Run a local queue of command (silent)', (done) => {
+		let scaffold = new Scaffold();
+
+		assert(scaffold);
+		assert(scaffold.local);
+
+		if (isLinux || isMac) {
+			scaffold
+				.run('ls -axpl /usr/local')
+				.run('ls -axpl /usr/local/lib')
+				.run('ls -axpl /tmp')
+				.go({verbose: false}, (err: Error, inst: Scaffold) => {
+					if (err) {
+						assert(false);
+					}
+					assert(inst === scaffold);
+				});
+		} else if (isWin) {
+			scaffold
+				.run('dir C:\Windows')
+				.run('dir C:\Windows\System')
+				.run('dir C:\Windows\System32')
+				.go({verbose: false}, (err: Error, inst: Scaffold) => {
+					if (err) {
+						assert(false);
+					}
+
+					assert(inst === scaffold);
+				});
+		}
+
+		done();
 	});
 });
