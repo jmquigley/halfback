@@ -38,7 +38,6 @@ export class Scaffold {
 	private _config: IScaffoldOpts = null;
 	private _history: string[] = [];
 	private _local: boolean = false;
-	private _output: string = '';
 	private _semaphore: Semaphore = null;
 
 	/**
@@ -224,10 +223,6 @@ export class Scaffold {
 		return this._history;
 	}
 
-	get output(): string {
-		return this._output;
-	}
-
 	/**
 	 * Runs the given command queue on the local host.
 	 * @param opts {ICommandOpts} the options that are used to run all commands
@@ -253,14 +248,15 @@ export class Scaffold {
 			let ret: string | Buffer = '';
 			if (!this._config.stub) {
 				try {
-					ret = proc.execSync(cmd);
+					let cmdopts = {};
+					if (opts.verbose) {
+						cmdopts = {stdio: 'inherit'};
+					}
+
+					ret = proc.execSync(cmd, cmdopts);
 				} catch (err) {
 					return cb(err, null);
 				}
-			}
-
-			if (opts.verbose && ret !== null && ret.length > 0) {
-				sanitize(ret, true);
 			}
 		}
 
@@ -316,13 +312,9 @@ export class Scaffold {
 							exec(ssh, self._cmds.shift());
 						}
 					}).on('data', (data: Buffer) => {
-						if (opts.verbose) {
-							let out = sanitize(data, true);
-							self._output += out.join('\n');
-						}
+						sanitize(data, opts.verbose);
 					}).stderr.on('data', (data: Buffer) => {
-						let out = sanitize(data, true);
-						self._output += out.join('\n');
+						sanitize(data, opts.verbose, console.error);
 					});
 				});
 			}

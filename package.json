@@ -26,7 +26,7 @@
     "lodash": "^4.17.4",
     "ssh2": "0.5.4",
     "util.rstrip": "0.0.12",
-    "util.toolbox": "0.0.6",
+    "util.toolbox": "0.0.7",
     "util.wait": "0.0.8",
     "uuid": "^3.0.1"
   },
@@ -45,7 +45,7 @@
     "tslint": "^4.5.1",
     "typescript": "^2.2.1",
     "util.fixture": "0.0.31",
-    "util.pkgwrap": "0.0.11"
+    "util.pkgwrap": "0.0.12"
   },
   "main": "./index.js",
   "types": "./index.d.ts",

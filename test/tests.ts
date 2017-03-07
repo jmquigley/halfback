@@ -6,8 +6,6 @@ import {Fixture} from 'util.fixture';
 import {isLinux, isMac, isWin} from 'util.toolbox';
 import {Scaffold} from '../index';
 
-const pkg = require('../package.json');
-
 describe('Testing Scaffolding', () => {
 
 	it('Test the creation of a local scaffold object', () => {
@@ -34,9 +32,6 @@ describe('Testing Scaffolding', () => {
 					assert(false, err.message);
 				}
 
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
-				}
 				assert(obj instanceof Scaffold);
 				done();
 			});
@@ -60,10 +55,6 @@ describe('Testing Scaffolding', () => {
 					assert(false, err.message);
 				}
 
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
-				}
-
 				assert(obj instanceof Scaffold);
 				done();
 			});
@@ -85,10 +76,6 @@ describe('Testing Scaffolding', () => {
 			.go({verbose: true}, (err: Error, obj: Scaffold) => {
 				if (err) {
 					assert(false, err.message);
-				}
-
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
 				}
 
 				assert(obj instanceof Scaffold);
@@ -116,10 +103,6 @@ describe('Testing Scaffolding', () => {
 					assert(false, err.message);
 				}
 
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
-				}
-
 				assert(obj instanceof Scaffold);
 				done();
 			});
@@ -145,10 +128,6 @@ describe('Testing Scaffolding', () => {
 					assert(false, err.message);
 				}
 
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
-				}
-
 				assert(obj instanceof Scaffold);
 				done();
 			});
@@ -169,10 +148,6 @@ describe('Testing Scaffolding', () => {
 			.go({verbose: true}, (err: Error, obj: Scaffold) => {
 				if (err) {
 					assert(false, err.message);
-				}
-
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
 				}
 
 				assert(obj instanceof Scaffold);
@@ -197,10 +172,6 @@ describe('Testing Scaffolding', () => {
 			.go({verbose: true}, (err: Error, obj: Scaffold) => {
 				if (err) {
 					assert(false, err.message);
-				}
-
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
 				}
 
 				assert(obj instanceof Scaffold);
@@ -230,10 +201,6 @@ describe('Testing Scaffolding', () => {
 					assert(false, err.message);
 				}
 
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
-				}
-
 				assert(obj instanceof Scaffold);
 				done();
 			});
@@ -261,10 +228,6 @@ describe('Testing Scaffolding', () => {
 			.go({verbose: true}, (err: Error, obj: Scaffold) => {
 				if (err) {
 					assert(false, err.message);
-				}
-
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
 				}
 
 				assert(obj instanceof Scaffold);
@@ -297,10 +260,6 @@ describe('Testing Scaffolding', () => {
 			.go({verbose: true}, (err: Error, obj: Scaffold) => {
 				if (err) {
 					assert(false, err.message);
-				}
-
-				if (pkg.debug) {
-					console.log(`OUTPUT:\n${scaffold.output}`);
 				}
 
 				assert(obj instanceof Scaffold);
