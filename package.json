@@ -26,8 +26,8 @@
     "lodash": "^4.17.4",
     "ssh2": "0.5.4",
     "util.rstrip": "0.0.12",
-    "util.toolbox": "0.0.7",
-    "util.wait": "0.0.8",
+    "util.toolbox": "0.0.8",
+    "util.wait": "0.0.9",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
@@ -50,7 +50,7 @@
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "all": "npm run lint && npm install && npm run build && npm test && npm run report",
+    "all": "npm install && npm run lint && npm run build && npm test && npm run report",
     "build": "./node_modules/.bin/pkgwrap --build && npm run docs",
     "coverage": "./node_modules/.bin/pkgwrap --coverage",
     "docs": "./node_modules/.bin/gulp docs",
