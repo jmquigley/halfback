@@ -3,11 +3,11 @@
 import * as proc from 'child_process';
 import * as fs from 'fs-extra';
 import {Client, ClientChannel, ConnectConfig} from 'ssh2';
+import {expandHomeDirectory as home} from 'util.home';
 import {nil, sanitize} from 'util.toolbox';
 import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
-const home = require('expand-home-dir');
 const pkg = require('./package.json');
 
 export interface IScaffoldOpts extends ConnectConfig {
