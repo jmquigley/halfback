@@ -1,10 +1,9 @@
 'use strict';
 
-import * as proc from 'child_process';
 import * as fs from 'fs-extra';
 import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import {expandHomeDirectory as home} from 'util.home';
-import {nil, sanitize} from 'util.toolbox';
+import {callSync, nil, sanitize} from 'util.toolbox';
 import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
@@ -28,6 +27,7 @@ export interface ICommandOpts {
 	recursive?: boolean;
 	sudo?: boolean;
 	verbose?: boolean;
+	shell?: string;
 }
 
 /** an instance of the Scaffold class */
@@ -194,6 +194,9 @@ export class Scaffold {
 	 * @param [opts] {ICommandOpts} a set of commands used to process this queue.
 	 *
 	 *     - verbose: {boolean} if true, then print more output, otherwise silent
+	 *     - shell: {string} the shell that the command should be run against.  This
+	 *       is only relevant for the local processor.   The remote processor runs
+	 *       with the shell of the authenticated in user.
 	 *
 	 * @param [cb] {Function} a callback function that is executed when this process
 	 * completes.  It will be executed on success or failure.
@@ -205,7 +208,8 @@ export class Scaffold {
 		}
 
 		opts = Object.assign({
-			verbose: true
+			verbose: true,
+			shell: '/bin/bash'
 		}, opts);
 
 		if (this._local) {
@@ -245,18 +249,12 @@ export class Scaffold {
 
 			this._history.push(cmd);
 
-			let ret: string | Buffer = '';
 			if (!this._config.stub) {
-				try {
-					let cmdopts = {};
-					if (opts.verbose) {
-						cmdopts = {stdio: 'inherit'};
+				callSync(cmd, (err: Error) => {
+					if (err) {
+						return cb(err, self);
 					}
-
-					ret = proc.execSync(cmd, cmdopts);
-				} catch (err) {
-					return cb(err, null);
-				}
+				});
 			}
 		}
 
