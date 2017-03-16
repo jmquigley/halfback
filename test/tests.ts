@@ -271,7 +271,7 @@ describe('Testing Scaffolding', () => {
 		assert(scaffold.history[2] === 'sudo -E ls /usr/bin');
 	});
 
-	it('Run a local queue of command (silent)', (done) => {
+	it('Run a local queue of commands (silent)', (done) => {
 		let scaffold = new Scaffold();
 
 		assert(scaffold);
