@@ -27,7 +27,7 @@
     "util.home": "0.0.3",
     "util.rstrip": "0.0.12",
     "util.toolbox": "0.0.11",
-    "util.wait": "0.0.10",
+    "util.wait": "0.0.11",
     "uuid": "^3.0.1"
   },
   "devDependencies": {

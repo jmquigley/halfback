@@ -5,9 +5,9 @@
 This module contains functions for simplifying SSH interactions with the remote production server.  It can be used to run commands, change config, create files, etc.
 
 Each of the calls to run, sudo, etc, are sent to a command list queue.  Once the commands are queued up, then the `go` function is called to process the commands in order.  This class is used to group together dependent functions.  Each grouping of commands should be a separate instantiation of the Scaffold class.  e.g.
- 
+
     let scaffold = new Scaffold(config.ssh);
- 
+
     scaffold
         .run('uname -a')
         .sudo('env | sort')
@@ -49,8 +49,7 @@ let config = {
     "publicKeyFile": "~/.ssh/id_rsa.pub"
 };
 
-let scaffold = new Scaffold(config);
-scaffold
+new Scaffold(config)
     .run('uname -a')
     .sudo('env | sort')
     .mkdir('/var/log/myapp', {mode: '700', owner: 'root', group: 'docker'})
@@ -65,7 +64,7 @@ scaffold
     })
 ```
 
-An instance of the [Scaffold](docs/index.md) class is created.  Methods can be chained to this instance to queue commands.  The first command above runs the uname command on the remote server.  It runs it as the `centos` user.  The second command dumps a sorted list of environment variables using sudo.  This assumes that the SSH user `centos` has sudo permissions (or this command will fail).  The third chained command creates a directory named `/var/log/myapp` and sets the permissions/ownership of the directory.  The fourth command takes a file on the local machine and moves it to the remote machine.  It works with text files only.  All four of these commands are added to a queue.  Execution starts when the `go` command is called.  It processes each command in order.  When it finishes a callback is executed.  It uses the first parameter as an `err` convention.
+An instance of the [Scaffold](docs/index.md) class is created.  Methods can be chained to this instance to queue commands.  The first command above runs the `uname` command on the remote server.  It runs it as the `centos` user.  The second command dumps a sorted list of environment variables using sudo.  This assumes that the SSH user `centos` has sudo permissions (or this command will fail).  The third chained command creates a directory named `/var/log/myapp` and sets the permissions/ownership of the directory.  The fourth command takes a file on the local machine and moves it to the remote machine.  It works with text files only.  All four of these commands are added to a queue.  Execution starts when the `go` command is called.  It processes each command in order.  When it finishes a callback is executed.  The callback uses the ["error first callback" convention](http://fredkschott.com/post/2014/03/understanding-error-first-callbacks-in-node-js/) in node.
 
 ## API
 The module is composed of one class named [Scaffold](docs/index.md).  It has the following public functions:

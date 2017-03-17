@@ -95,10 +95,11 @@ export class Scaffold {
 		this._semaphore.increment();
 		this._cmds.push(cmd);
 
-		wait(opts.delay)
-			.catch((err: string) => {
-				console.error(err);
-			});
+		wait(opts.delay, (err: Error) => {
+			if (err) {
+				console.error(err.message);
+			}
+		});
 
 		return this;
 	};
