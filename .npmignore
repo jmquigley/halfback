@@ -8,7 +8,6 @@ tslint.json
 .gitignore
 .gitattributes
 
-
 coverage
 .nyc_output
 *.ts
@@ -18,3 +17,4 @@ test.d.ts
 
 *.js.map
 gulpfile.*
+yarn.lock
