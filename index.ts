@@ -181,11 +181,7 @@ export class Scaffold {
 	public copy(src: string, dst: string, opts: ICommandOpts = null) {
 		opts = Object.assign({recursive: false, sudo: false}, opts);
 
-		if (fs.existsSync(src)) {
-			this.run(`cp ${(opts.recursive) ? '-r' : ''} ${src} ${dst}`, {sudo: opts.sudo});
-		} else {
-			console.log(`No copy.  ${src} does not exist`);
-		}
+		this.run(`cp ${(opts.recursive) ? '-r' : ''} ${src} ${dst}`, {sudo: opts.sudo});
 
 		return this;
 	};
@@ -244,14 +240,14 @@ export class Scaffold {
 			let cmd: string = this._cmds.shift();
 			this._semaphore.decrement();
 
-			if (opts.verbose) {
+			if (pkg.debug) {
 				sanitize(`Executing[${pos++}]: ${cmd}`, true);
 			}
 
 			this._history.push(cmd);
 
 			if (!this._config.stub) {
-				callSync(cmd, (err: Error) => {
+				callSync(cmd, {verbose: opts.verbose}, (err: Error) => {
 					if (err) {
 						return cb(err, self);
 					}
@@ -263,7 +259,8 @@ export class Scaffold {
 	}
 
 	/**
-	 * Runs the given command queue on the remote server.
+	 * Runs the given command queue on the remote server.  It uses the ssh2
+	 * library to connnect and execute the commands on the server.
 	 * @param opts {ICommandOpts} the options that are used to run all commands
 	 * in the queue.
 	 * @param cb {Function} a callback function that is executed when the

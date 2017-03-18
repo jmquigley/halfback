@@ -4,6 +4,7 @@ import * as assert from 'assert';
 import * as path from 'path';
 import {Fixture} from 'util.fixture';
 import {isLinux, isMac, isWin} from 'util.toolbox';
+import * as uuid from 'uuid';
 import {Scaffold} from '../index';
 
 describe('Testing Scaffolding', () => {
@@ -238,6 +239,29 @@ describe('Testing Scaffolding', () => {
 		assert(scaffold.history[0] === `cp ${src} ${dst}`);
 	});
 
+	it('Test the copy command with invalid source file (negative test)', (done) => {
+		let fixture = new Fixture('put-file');
+		let scaffold = new Scaffold();
+
+		assert(scaffold);
+		assert(scaffold.local);
+
+		let src: string = path.join(fixture.dir, uuid.v4());
+		let dst: string = path.join(fixture.dir, 'newfile.txt');
+
+		scaffold
+			.copy(src, dst)
+			.go({verbose: true}, (err: Error) => {
+				if (err) {
+					assert(true, err.message);
+					done();
+				}
+
+				assert(false, `Shouldn't get here`);
+				done();
+			});
+	});
+
 	it('Use a stubbed version to show remote execution (stub)', () => {
 		let fixture = new Fixture('fake-keys');
 		let scaffold = new Scaffold({
@@ -290,10 +314,40 @@ describe('Testing Scaffolding', () => {
 				});
 		} else if (isWin) {
 			scaffold
-				.run('dir C:\Windows')
-				.run('dir C:\Windows\System')
-				.run('dir C:\Windows\System32')
+				.run('dir C:\\Windows')
+				.run('dir C:\\Windows\\System')
+				.run('dir C:\\Windows\\System32')
 				.go({verbose: false}, (err: Error, inst: Scaffold) => {
+					if (err) {
+						assert(false);
+					}
+
+					assert(inst === scaffold);
+				});
+		}
+
+		done();
+	});
+
+	it('Run a test of go() function with no options', (done) => {
+		let scaffold = new Scaffold();
+
+		assert(scaffold);
+		assert(scaffold.local);
+
+		if (isLinux || isMac) {
+			scaffold
+				.run('ls -axpl /usr/local')
+				.go((err: Error, inst: Scaffold) => {
+					if (err) {
+						assert(false);
+					}
+					assert(inst === scaffold);
+				});
+		} else if (isWin) {
+			scaffold
+				.run('dir C:\\Windows')
+				.go((err: Error, inst: Scaffold) => {
 					if (err) {
 						assert(false);
 					}
