@@ -19,10 +19,10 @@
   "dependencies": {
     "fs-extra": "^2.1.2",
     "ssh2": "0.5.4",
-    "util.home": "0.0.4",
-    "util.toolbox": "0.0.12",
-    "util.wait": "0.0.14",
-    "util.pkgwrap": "0.0.17",
+    "util.home": "0.0.5",
+    "util.pkgwrap": "0.0.18",
+    "util.toolbox": "0.0.13",
+    "util.wait": "0.0.16",
     "uuid": "^3.0.1"
   },
   "devDependencies": {

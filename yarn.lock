@@ -329,11 +329,7 @@ beeper@^1.0.0:
   version "1.1.1"
   resolved "https://registry.yarnpkg.com/beeper/-/beeper-1.1.1.tgz#e6d5ea8c5dad001304a70b22638447f69cb2f809"
 
-bluebird@^3.1.1:
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.5.0.tgz#791420d7f551eea2897453a8a77653f96606d67c"
-
-bluebird@~3.4.6:
+bluebird@^3.1.1, bluebird@~3.4.6:
   version "3.4.7"
   resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.4.7.tgz#f72d760be09b7f76d08ed8fae98b289a8d05fab3"
 
@@ -1135,6 +1131,10 @@ expand-brackets@^0.1.4:
 expand-home-dir@0.0.3:
   version "0.0.3"
   resolved "https://registry.yarnpkg.com/expand-home-dir/-/expand-home-dir-0.0.3.tgz#72de8a0486cc28a3bbd704635398825b5b62827d"
+
+"expand-home-dir@github:jmquigley/expand-home-dir":
+  version "0.0.3"
+  resolved "https://codeload.github.com/jmquigley/expand-home-dir/tar.gz/05ec8dcf0aaff75086ec79fdba28e1f85c2bf0c0"
 
 expand-range@^1.8.1:
   version "1.8.2"
@@ -2502,8 +2502,8 @@ mocha@^3.2.0:
     supports-color "3.1.2"
 
 moment@^2.14.1:
-  version "2.17.1"
-  resolved "https://registry.yarnpkg.com/moment/-/moment-2.17.1.tgz#fed9506063f36b10f066c8b59a144d7faebe1d82"
+  version "2.18.0"
+  resolved "https://registry.yarnpkg.com/moment/-/moment-2.18.0.tgz#6cfec6a495eca915d02600a67020ed994937252c"
 
 ms@0.7.1:
   version "0.7.1"
@@ -3570,8 +3570,8 @@ typical@^2.1, typical@^2.2, typical@^2.3.0, typical@^2.4.2, typical@^2.5.0, typi
   resolved "https://registry.yarnpkg.com/typical/-/typical-2.6.0.tgz#89d51554ab139848a65bcc2c8772f8fb450c40ed"
 
 uglify-js@^2.6:
-  version "2.8.13"
-  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.13.tgz#d0cdf02f3c661484fac601b7e723207b735a374c"
+  version "2.8.14"
+  resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-2.8.14.tgz#25b15d1af39b21752ee33703adbf432e8bc8f77d"
   dependencies:
     source-map "~0.5.1"
     uglify-to-browserify "~1.0.0"
@@ -3705,6 +3705,13 @@ util.home@0.0.4:
     util.pkgwrap "0.0.17"
     util.toolbox "0.0.12"
 
+util.home@0.0.5:
+  version "0.0.5"
+  resolved "https://registry.yarnpkg.com/util.home/-/util.home-0.0.5.tgz#5634a18ab364b0bffb8d8e19613e32e709756afa"
+  dependencies:
+    util.pkgwrap "0.0.18"
+    util.toolbox "0.0.13"
+
 util.pkgwrap@0.0.11:
   version "0.0.11"
   resolved "https://registry.yarnpkg.com/util.pkgwrap/-/util.pkgwrap-0.0.11.tgz#168a31f3fd62d03751940980d342301637183317"
@@ -3731,6 +3738,15 @@ util.pkgwrap@0.0.17:
     lodash "^4.17.4"
     yargs "^6.5.0"
 
+util.pkgwrap@0.0.18:
+  version "0.0.18"
+  resolved "https://registry.yarnpkg.com/util.pkgwrap/-/util.pkgwrap-0.0.18.tgz#d36e85311550ac37c945eef4f92eba9c77b78e35"
+  dependencies:
+    expand-home-dir "github:jmquigley/expand-home-dir"
+    fs-extra "^2.0.0"
+    lodash "^4.17.4"
+    yargs "^6.5.0"
+
 util.rstrip@0.0.12:
   version "0.0.12"
   resolved "https://registry.yarnpkg.com/util.rstrip/-/util.rstrip-0.0.12.tgz#f251e50ffa7310c16189e74be1a0306dc9640f59"
@@ -3741,6 +3757,12 @@ util.rstrip@0.0.12:
     util.pkgwrap "0.0.11"
     yargs "^6.6.0"
 
+util.rstrip@0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/util.rstrip/-/util.rstrip-0.0.13.tgz#ced1da3d7c24d6e8c22a4782a99d9bd0769b6487"
+  dependencies:
+    util.pkgwrap "0.0.17"
+
 util.toolbox@0.0.12:
   version "0.0.12"
   resolved "https://registry.yarnpkg.com/util.toolbox/-/util.toolbox-0.0.12.tgz#0c9ebcd9a50a55b63fb48d8ca1481a04a8adfff8"
@@ -3748,11 +3770,18 @@ util.toolbox@0.0.12:
     util.pkgwrap "0.0.17"
     util.rstrip "0.0.12"
 
-util.wait@0.0.14:
-  version "0.0.14"
-  resolved "https://registry.yarnpkg.com/util.wait/-/util.wait-0.0.14.tgz#cc3feeb64def450aaf7706a2917444da8d840e33"
+util.toolbox@0.0.13:
+  version "0.0.13"
+  resolved "https://registry.yarnpkg.com/util.toolbox/-/util.toolbox-0.0.13.tgz#912eccbb3a85408538f6d26c8144d3a81d7b6b36"
   dependencies:
-    util.pkgwrap "0.0.17"
+    util.pkgwrap "0.0.18"
+    util.rstrip "0.0.13"
+
+util.wait@0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/util.wait/-/util.wait-0.0.16.tgz#1254401498b09bd0656ea81fcb72c67e271f3abe"
+  dependencies:
+    util.pkgwrap "0.0.18"
 
 uuid@^3.0.0, uuid@^3.0.1:
   version "3.0.1"
