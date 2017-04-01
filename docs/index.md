@@ -17,7 +17,10 @@ an instance of the Scaffold class
 <a name="new_Scaffold_new"></a>
 
 ### new Scaffold([opts])
-The constructor function for the scaffolding.  This takes a single parameterthat represents the configuration required to connect to a remote host usingSSH.  If the config is empty, then the commands are all executed on thelocal host instead.
+The constructor function for the scaffolding.  This takes a single parameter
+that represents the configuration required to connect to a remote host using
+SSH.  If the config is empty, then the commands are all executed on the
+local host instead.
 
 
 | Param | Type | Description |
@@ -39,7 +42,8 @@ Runs a command on a remote or local server.
 <a name="Scaffold+sudo"></a>
 
 ### scaffold.sudo(cmd, opts)
-A sugar wrapper for calling run with sudo wrapped around it.  See "run" forthe list of parameters in the args object.
+A sugar wrapper for calling run with sudo wrapped around it.  See "run" for
+the list of parameters in the args object.
 
 **Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
 
@@ -78,7 +82,9 @@ Creates a directory on the remote server.
 <a name="Scaffold+copy"></a>
 
 ### scaffold.copy(src, dst, [opts]) ⇒ <code>[Scaffold](#Scaffold)</code>
-Copies a file from one location to the other (on the same server).  Use putto move a file from locatl to remote.  This just moves things around on thesame server.
+Copies a file from one location to the other (on the same server).  Use put
+to move a file from locatl to remote.  This just moves things around on the
+same server.
 
 **Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
 **Returns**: <code>[Scaffold](#Scaffold)</code> - a reference to this object for chaining.  

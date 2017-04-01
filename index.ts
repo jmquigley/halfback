@@ -102,7 +102,7 @@ export class Scaffold {
 		});
 
 		return this;
-	};
+	}
 
 	/**
 	 * A sugar wrapper for calling run with sudo wrapped around it.  See "run" for
@@ -115,7 +115,7 @@ export class Scaffold {
 		opts.sudo = true;
 
 		return this.run(cmd, opts);
-	};
+	}
 
 	/**
 	 * Takes a text file and puts it on the target remote machine.
@@ -132,7 +132,7 @@ export class Scaffold {
 	public put(lfile: string, rfile: string, opts: ICommandOpts = null) {
 		opts = Object.assign({mode: '755', owner: 'root', group: 'root'}, opts);
 
-		let id: string = uuid.v4();
+		const id: string = uuid.v4();
 		let cmd = `tee ${rfile} <<-'${id}'\n`;
 		cmd += fs.readFileSync(lfile);
 		cmd += `\n${id}`;
@@ -141,7 +141,7 @@ export class Scaffold {
 		this.sudo(`chmod -R ${opts.mode} ${rfile}`);
 
 		return this;
-	};
+	}
 
 	/**
 	 * Creates a directory on the remote server.
@@ -163,7 +163,7 @@ export class Scaffold {
 		this.sudo(`chmod -R ${opts.mode} ${directory}`);
 
 		return this;
-	};
+	}
 
 	/**
 	 * Copies a file from one location to the other (on the same server).  Use put
@@ -181,10 +181,10 @@ export class Scaffold {
 	public copy(src: string, dst: string, opts: ICommandOpts = null) {
 		opts = Object.assign({recursive: false, sudo: false}, opts);
 
-		this.run(`cp ${(opts.recursive) ? '-r' : ''} ${src} ${dst}`, {sudo: opts.sudo});
+		this.run(`cp ${(opts.recursive) ? '-r ' : ''}${src} ${dst}`, {sudo: opts.sudo});
 
 		return this;
-	};
+	}
 
 	/**
 	 * Starts the processing of the command queue.
@@ -198,7 +198,7 @@ export class Scaffold {
 	 * @param [cb] {Function} a callback function that is executed when this process
 	 * completes.  It will be executed on success or failure.
 	 */
-	public go(opts?: ICommandOpts, cb?: Function) {
+	public go(opts?: ICommandOpts, cb = nil) {
 		if (typeof opts === 'function') {
 			cb = opts;
 			opts = null;
@@ -234,10 +234,12 @@ export class Scaffold {
 	 * @returns the result of the given callback function.
 	 * @private
 	 */
-	private runLocal(opts: ICommandOpts, cb: Function = nil, self = this) {
+	private runLocal(opts: ICommandOpts, cb = nil, self = this) {
 		let pos: number = 1;
-		while (this._cmds.length > 0) {
-			let cmd: string = this._cmds.shift();
+		let err: Error = null;
+
+		while (this._cmds.length > 0 && err == null) {
+			const cmd: string = this._cmds.shift();
 			this._semaphore.decrement();
 
 			if (pkg.debug) {
@@ -247,15 +249,13 @@ export class Scaffold {
 			this._history.push(cmd);
 
 			if (!this._config.stub) {
-				callSync(cmd, {verbose: opts.verbose}, (err: Error) => {
-					if (err) {
-						return cb(err, self);
-					}
+				callSync(cmd, {verbose: opts.verbose}, (perr: Error) => {
+					err = perr;
 				});
 			}
 		}
 
-		return cb(null, self);
+		return cb(err, self);
 	}
 
 	/**
@@ -269,7 +269,7 @@ export class Scaffold {
 	 * @returns the result of the given callback function.
 	 * @private
 	 */
-	private runRemote(opts: ICommandOpts, cb: Function = nil, self = this) {
+	private runRemote(opts: ICommandOpts, cb = nil, self = this) {
 		let pos = 1;
 
 		let conn: Client = null;
