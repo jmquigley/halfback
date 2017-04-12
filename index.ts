@@ -3,7 +3,7 @@
 import * as fs from 'fs-extra';
 import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import {expandHomeDirectory as home} from 'util.home';
-import {callSync, nil, sanitize} from 'util.toolbox';
+import {callSync, nil, sanitize, success} from 'util.toolbox';
 import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
@@ -249,9 +249,9 @@ export class Scaffold {
 			this._history.push(cmd);
 
 			if (!this._config.stub) {
-				callSync(cmd, {verbose: opts.verbose}, (perr: Error) => {
-					err = perr;
-				});
+				if (callSync(cmd, {verbose: opts.verbose}) !== success) {
+					err = new Error(`Error in command: ${cmd}`);
+				}
 			}
 		}
 
@@ -334,7 +334,7 @@ export class Scaffold {
 				cb(null, self);
 			})
 			.catch((err: string) => {
-				return cb(err, self);
+				return cb(new Error(err), self);
 			});
 	}
 }

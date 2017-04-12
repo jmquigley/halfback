@@ -19,10 +19,10 @@
   "dependencies": {
     "fs-extra": "^2.1.2",
     "ssh2": "0.5.4",
-    "util.home": "0.0.11",
-    "util.pkgwrap": "0.0.20",
-    "util.toolbox": "0.0.15",
-    "util.wait": "0.0.17",
+    "util.home": "0.0.12",
+    "util.pkgwrap": "0.0.21",
+    "util.toolbox": "0.0.23",
+    "util.wait": "0.0.18",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
@@ -30,7 +30,7 @@
     "@types/node": "^7.0.12",
     "@types/ssh2": "^0.5.35",
     "@types/uuid": "^2.0.29",
-    "ava": "^0.18.2",
+    "ava": "^0.19.1",
     "coveralls": "^2.13.0",
     "gulp": "^3.9.1",
     "gulp-cli": "^1.2.2",
@@ -39,9 +39,9 @@
     "gulp-rename": "^1.2.2",
     "gulp-util": "^3.0.8",
     "nyc": "^10.2.0",
-    "tslint": "^5.0.0",
+    "tslint": "^5.1.0",
     "typescript": "^2.2.2",
-    "util.fixture": "0.0.44"
+    "util.fixture": "0.0.47"
   },
   "main": "./index.js",
   "types": "./index.d.ts",
