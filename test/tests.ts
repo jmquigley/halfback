@@ -13,7 +13,7 @@ test.after.always.cb(t => {
 });
 
 test('Test the creation of a local scaffold object', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -22,7 +22,7 @@ test('Test the creation of a local scaffold object', t => {
 });
 
 test.cb('Test the use of the local run command (stub)', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -45,7 +45,7 @@ test.cb('Test the use of the local run command (stub)', t => {
 });
 
 test.cb('Test run with change in current working directory (stub)', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -68,7 +68,7 @@ test.cb('Test run with change in current working directory (stub)', t => {
 });
 
 test.cb('Test run with sudo modifier (stub)', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -91,7 +91,7 @@ test.cb('Test run with sudo modifier (stub)', t => {
 });
 
 test.cb('Chain three run commands together (stub)', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -118,7 +118,7 @@ test.cb('Chain three run commands together (stub)', t => {
 });
 
 test.cb('Test an empty run call (stub)', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -140,7 +140,7 @@ test.cb('Test an empty run call (stub)', t => {
 });
 
 test.cb('Test the sudo direct call function', t => {
-	let scaffold = new Scaffold({
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -163,8 +163,8 @@ test.cb('Test the sudo direct call function', t => {
 });
 
 test.cb('Test the put command direct function', t => {
-	let fixture = new Fixture('put-file');
-	let scaffold = new Scaffold({
+	const fixture = new Fixture('put-file');
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
@@ -189,15 +189,15 @@ test.cb('Test the put command direct function', t => {
 });
 
 test.cb('Test the mkdir command direct function', t => {
-	let fixture = new Fixture();
-	let scaffold = new Scaffold({
+	const fixture = new Fixture();
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
 	t.truthy(scaffold);
 	t.true(scaffold.local);
 
-	let dir: string = path.join(fixture.dir, 'newdir');
+	const dir: string = path.join(fixture.dir, 'newdir');
 	scaffold
 		.mkdir(dir)
 		.go({verbose: true}, (err: Error, obj: Scaffold) => {
@@ -216,16 +216,16 @@ test.cb('Test the mkdir command direct function', t => {
 });
 
 test.cb('Test the copy command direct function', t => {
-	let fixture = new Fixture('put-file');
-	let scaffold = new Scaffold({
+	const fixture = new Fixture('put-file');
+	const scaffold = new Scaffold({
 		stub: true
 	});
 
 	t.truthy(scaffold);
 	t.true(scaffold.local);
 
-	let src: string = path.join(fixture.dir, 'sample.txt');
-	let dst: string = path.join(fixture.dir, 'newfile.txt');
+	const src: string = path.join(fixture.dir, 'sample.txt');
+	const dst: string = path.join(fixture.dir, 'newfile.txt');
 
 	scaffold
 		.copy(src, dst)
@@ -243,14 +243,14 @@ test.cb('Test the copy command direct function', t => {
 });
 
 test.cb('Test the copy command with invalid source file (negative test)', t => {
-	let fixture = new Fixture('put-file');
-	let scaffold = new Scaffold();
+	const fixture = new Fixture('put-file');
+	const scaffold = new Scaffold();
 
 	t.truthy(scaffold);
 	t.true(scaffold.local);
 
-	let src: string = path.join(fixture.dir, uuid.v4());
-	let dst: string = path.join(fixture.dir, 'newfile.txt');
+	const src: string = path.join(fixture.dir, uuid.v4());
+	const dst: string = path.join(fixture.dir, 'newfile.txt');
 
 	scaffold
 		.copy(src, dst)
@@ -266,8 +266,8 @@ test.cb('Test the copy command with invalid source file (negative test)', t => {
 });
 
 test.cb('Use a stubbed version to show remote execution (stub)', t => {
-	let fixture = new Fixture('fake-keys');
-	let scaffold = new Scaffold({
+	const fixture = new Fixture('fake-keys');
+	const scaffold = new Scaffold({
 		stub: true,
 		hostname: 'example.com',
 		host: '127.0.0.1',
@@ -300,7 +300,7 @@ test.cb('Use a stubbed version to show remote execution (stub)', t => {
 });
 
 test.cb('Run a local queue of commands (silent)', t => {
-	let scaffold = new Scaffold();
+	const scaffold = new Scaffold();
 
 	t.truthy(scaffold);
 	t.true(scaffold.local);
@@ -337,7 +337,7 @@ test.cb('Run a local queue of commands (silent)', t => {
 });
 
 test.cb('Run a test of go() function with no options', t => {
-	let scaffold = new Scaffold();
+	const scaffold = new Scaffold();
 
 	t.truthy(scaffold);
 	t.true(scaffold.local);

@@ -19,15 +19,15 @@
   "dependencies": {
     "fs-extra": "^2.1.2",
     "ssh2": "0.5.4",
-    "util.home": "0.0.12",
-    "util.pkgwrap": "0.0.21",
-    "util.toolbox": "0.0.23",
-    "util.wait": "0.0.18",
+    "util.home": "0.0.13",
+    "util.pkgwrap": "0.0.26",
+    "util.toolbox": "0.0.25",
+    "util.wait": "0.0.19",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@types/fs-extra": "2.0.0",
-    "@types/node": "^7.0.12",
+    "@types/fs-extra": "2.1.0",
+    "@types/node": "^7.0.13",
     "@types/ssh2": "^0.5.35",
     "@types/uuid": "^2.0.29",
     "ava": "^0.19.1",
@@ -41,7 +41,7 @@
     "nyc": "^10.2.0",
     "tslint": "^5.1.0",
     "typescript": "^2.2.2",
-    "util.fixture": "0.0.47"
+    "util.fixture": "0.0.48"
   },
   "main": "./index.js",
   "types": "./index.d.ts",
