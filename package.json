@@ -19,15 +19,15 @@
   "dependencies": {
     "fs-extra": "^3.0.1",
     "ssh2": "0.5.4",
-    "util.home": "0.0.14",
-    "util.pkgwrap": "0.0.27",
-    "util.toolbox": "0.0.28",
-    "util.wait": "0.0.21",
+    "util.home": "0.0.15",
+    "util.pkgwrap": "0.0.43",
+    "util.toolbox": "0.0.30",
+    "util.wait": "0.0.22",
     "uuid": "^3.0.1"
   },
   "devDependencies": {
-    "@types/fs-extra": "3.0.0",
-    "@types/node": "^7.0.18",
+    "@types/fs-extra": "3.0.2",
+    "@types/node": "^7.0.21",
     "@types/ssh2": "^0.5.35",
     "@types/uuid": "^2.0.29",
     "ava": "^0.19.1",
@@ -41,18 +41,19 @@
     "nyc": "^10.3.2",
     "tslint": "^5.2.0",
     "typescript": "^2.3.2",
-    "util.fixture": "0.0.52"
+    "util.fixture": "0.0.53"
   },
   "main": "./index.js",
   "types": "./index.d.ts",
   "scripts": {
-    "all": "npm install && npm run lint && npm run build && npm test && npm run report",
-    "build": "./node_modules/.bin/pkgwrap --build && npm run docs",
-    "coverage": "./node_modules/.bin/pkgwrap --coverage",
-    "docs": "./node_modules/.bin/gulp docs",
-    "lint": "./node_modules/.bin/pkgwrap --lint",
-    "postinstall": "./node_modules/.bin/pkgwrap --postinstall",
-    "report": "./node_modules/.bin/pkgwrap --reporting",
-    "test": "./node_modules/.bin/pkgwrap --testing --ava"
+    "all": "npm install && npm run clean && npm run lint && npm run build && npm test && npm run report",
+    "build": "pkgwrap --build && npm run docs",
+    "clean": "pkgwrap --clean",
+    "coverage": "pkgwrap --coverage",
+    "docs": "gulp docs",
+    "lint": "pkgwrap --lint",
+    "postinstall": "pkgwrap --postinstall",
+    "report": "pkgwrap --reporting",
+    "test": "pkgwrap --testing --ava"
   }
 }
