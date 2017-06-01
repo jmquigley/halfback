@@ -9,9 +9,9 @@ an instance of the Scaffold class
     * [new Scaffold([opts])](#new_Scaffold_new)
     * [.run(cmd, opts)](#Scaffold+run)
     * [.sudo(cmd, opts)](#Scaffold+sudo)
-    * [.put(lfile, rfile, opts)](#Scaffold+put) ⇒ <code>[Scaffold](#Scaffold)</code>
-    * [.mkdir(directory, opts)](#Scaffold+mkdir) ⇒ <code>[Scaffold](#Scaffold)</code>
-    * [.copy(src, dst, [opts])](#Scaffold+copy) ⇒ <code>[Scaffold](#Scaffold)</code>
+    * [.put(lfile, rfile, opts)](#Scaffold+put) ⇒ [<code>Scaffold</code>](#Scaffold)
+    * [.mkdir(directory, opts)](#Scaffold+mkdir) ⇒ [<code>Scaffold</code>](#Scaffold)
+    * [.copy(src, dst, [opts])](#Scaffold+copy) ⇒ [<code>Scaffold</code>](#Scaffold)
     * [.go([opts], [cb])](#Scaffold+go)
 
 <a name="new_Scaffold_new"></a>
@@ -32,7 +32,7 @@ local host instead.
 ### scaffold.run(cmd, opts)
 Runs a command on a remote or local server.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -45,7 +45,7 @@ Runs a command on a remote or local server.
 A sugar wrapper for calling run with sudo wrapped around it.  See "run" for
 the list of parameters in the args object.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -54,11 +54,11 @@ the list of parameters in the args object.
 
 <a name="Scaffold+put"></a>
 
-### scaffold.put(lfile, rfile, opts) ⇒ <code>[Scaffold](#Scaffold)</code>
+### scaffold.put(lfile, rfile, opts) ⇒ [<code>Scaffold</code>](#Scaffold)
 Takes a text file and puts it on the target remote machine.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
-**Returns**: <code>[Scaffold](#Scaffold)</code> - a reference to this object for chaining.  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
+**Returns**: [<code>Scaffold</code>](#Scaffold) - a reference to this object for chaining.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -68,11 +68,11 @@ Takes a text file and puts it on the target remote machine.
 
 <a name="Scaffold+mkdir"></a>
 
-### scaffold.mkdir(directory, opts) ⇒ <code>[Scaffold](#Scaffold)</code>
+### scaffold.mkdir(directory, opts) ⇒ [<code>Scaffold</code>](#Scaffold)
 Creates a directory on the remote server.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
-**Returns**: <code>[Scaffold](#Scaffold)</code> - a reference to this object for chaining.  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
+**Returns**: [<code>Scaffold</code>](#Scaffold) - a reference to this object for chaining.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -81,13 +81,13 @@ Creates a directory on the remote server.
 
 <a name="Scaffold+copy"></a>
 
-### scaffold.copy(src, dst, [opts]) ⇒ <code>[Scaffold](#Scaffold)</code>
+### scaffold.copy(src, dst, [opts]) ⇒ [<code>Scaffold</code>](#Scaffold)
 Copies a file from one location to the other (on the same server).  Use put
 to move a file from locatl to remote.  This just moves things around on the
 same server.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
-**Returns**: <code>[Scaffold](#Scaffold)</code> - a reference to this object for chaining.  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
+**Returns**: [<code>Scaffold</code>](#Scaffold) - a reference to this object for chaining.  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -100,7 +100,7 @@ same server.
 ### scaffold.go([opts], [cb])
 Starts the processing of the command queue.
 
-**Kind**: instance method of <code>[Scaffold](#Scaffold)</code>  
+**Kind**: instance method of [<code>Scaffold</code>](#Scaffold)  
 
 | Param | Type | Description |
 | --- | --- | --- |
