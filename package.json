@@ -1,6 +1,6 @@
 {
   "name": "util.scaffold",
-  "version": "0.0.23",
+  "version": "0.0.24",
   "author": "jmquigley <jmquigley@outlook.com>",
   "description": "A library to simplify SSH interactions with a remote server. It can be used to run commands, change config, create files, etc.",
   "debug": false,
