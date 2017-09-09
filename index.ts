@@ -3,7 +3,7 @@
 import * as fs from 'fs-extra';
 import {Client, ClientChannel, ConnectConfig} from 'ssh2';
 import {expandHomeDirectory as home} from 'util.home';
-import {callSync, nil, sanitize, success} from 'util.toolbox';
+import {callSync, INilCallback, nil, sanitize, success} from 'util.toolbox';
 import {Semaphore, wait} from 'util.wait';
 import * as uuid from 'uuid';
 
@@ -198,7 +198,8 @@ export class Scaffold {
 	 * @param [cb] {Function} a callback function that is executed when this process
 	 * completes.  It will be executed on success or failure.
 	 */
-	public go(opts?: ICommandOpts, cb = nil) {
+	public go(opts?: ICommandOpts | any, cb: INilCallback = nil) {
+
 		if (typeof opts === 'function') {
 			cb = opts;
 			opts = null;

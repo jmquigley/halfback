@@ -18,14 +18,16 @@ Note that coverage is difficult with this module.  It requires a host that can b
 
 ## Installation
 
+This module uses [yarn](https://yarnpkg.com/en/) to manage dependencies and run scripts for development.
+
 To install as an application dependency:
 ```
-$ npm install --save util.scaffold
+$ yarn add util.scaffold
 ```
 
 To build the app and run all tests:
 ```
-$ npm run all
+$ yarn run all
 ```
 
 
@@ -70,4 +72,3 @@ The module is composed of one class named [Scaffold](docs/index.md).  It has the
 - [put](docs/index.md#Scaffold+put) - takes a file from the local host and puts it on the remote host.
 - [run](docs/index.md#Scaffold+run) - runs a command on the remote host.
 - [sudo](docs/index.md#Scaffold+sudo) - runs a command on the remote host using sudo.
-
