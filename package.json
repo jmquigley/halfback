@@ -21,14 +21,14 @@
   "dependencies": {
     "fs-extra": "^4.0.2",
     "ssh2": "0.5.5",
-    "util.home": "0.0.21",
-    "util.toolbox": "0.0.55",
-    "util.wait": "0.0.29",
+    "util.home": "0.0.22",
+    "util.toolbox": "0.0.56",
+    "util.wait": "0.0.30",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
     "@types/fs-extra": "4.0.5",
-    "@types/node": "^8.0.53",
+    "@types/node": "^8.0.54",
     "@types/ssh2": "^0.5.35",
     "@types/uuid": "^3.4.3",
     "ava": "^0.24.0",
@@ -36,7 +36,8 @@
     "nyc": "^11.3.0",
     "tslint": "^5.8.0",
     "typescript": "^2.6.2",
-    "util.fixture": "0.0.60"
+    "util.fixture": "0.0.61",
+    "util.pkgwrap": "^0.0.88"
   },
   "pkgwrap": {
     "cleanup": [
@@ -45,12 +46,11 @@
   },
   "scripts": {
     "all": "yarn install && yarn run build && yarn test && yarn run docs && yarn run report",
-    "build": "yarn run clean && yarn run lint && pkgwrap --build",
+    "build": "yarn clean && yarn run lint && pkgwrap --build",
     "clean": "pkgwrap --clean",
     "coverage": "pkgwrap --coverage",
     "docs": "pkgwrap --docs",
     "lint": "pkgwrap --lint",
-    "preinstall": "yarn global add util.pkgwrap",
     "prepublishOnly": "yarn run all",
     "report": "pkgwrap --reporting",
     "test": "pkgwrap --testing --ava"
