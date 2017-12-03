@@ -3,6 +3,8 @@
   "version": "0.0.26",
   "author": "jmquigley <jmquigley@outlook.com>",
   "description": "A library to simplify SSH interactions with a remote server. It can be used to run commands, change config, create files, etc.",
+  "main": "./index.js",
+  "types": "./index.d.ts",
   "debug": false,
   "private": false,
   "license": "MIT",
@@ -14,13 +16,12 @@
     "url": "https://github.com/jmquigley/util.scaffold/issues"
   },
   "engines": {
-    "node": ">=7.5"
+    "node": ">=7.x"
   },
   "dependencies": {
     "fs-extra": "^4.0.2",
     "ssh2": "0.5.5",
     "util.home": "0.0.20",
-    "util.pkgwrap": "0.0.73",
     "util.toolbox": "0.0.53",
     "util.wait": "0.0.28",
     "uuid": "^3.1.0"
@@ -37,22 +38,21 @@
     "typescript": "^2.6.1",
     "util.fixture": "0.0.59"
   },
-  "main": "./index.js",
-  "types": "./index.d.ts",
-  "scripts": {
-    "all": "yarn install && yarn run clean && yarn run lint && yarn run build && yarn test && yarn run docs && yarn run report",
-    "build": "pkgwrap --build",
-    "clean": "pkgwrap --clean",
-    "coverage": "pkgwrap --coverage",
-    "docs": "pkgwrap --docs",
-    "lint": "pkgwrap --lint",
-    "postinstall": "pkgwrap --postinstall",
-    "report": "pkgwrap --reporting",
-    "test": "pkgwrap --testing --ava"
-  },
   "pkgwrap": {
     "cleanup": [
       "docs"
     ]
+  },
+  "scripts": {
+    "all": "yarn install && yarn run build && yarn test && yarn run docs && yarn run report",
+    "build": "yarn run clean && yarn run lint && pkgwrap --build",
+    "clean": "pkgwrap --clean",
+    "coverage": "pkgwrap --coverage",
+    "docs": "pkgwrap --docs",
+    "lint": "pkgwrap --lint",
+    "preinstall": "yarn global add util.pkgwrap",
+    "prepublishOnly": "yarn run all",
+    "report": "pkgwrap --reporting",
+    "test": "pkgwrap --testing --ava"
   }
 }
