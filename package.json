@@ -21,9 +21,9 @@
   "dependencies": {
     "fs-extra": "^4.0.2",
     "ssh2": "0.5.5",
-    "util.home": "0.0.20",
-    "util.toolbox": "0.0.53",
-    "util.wait": "0.0.28",
+    "util.home": "0.0.21",
+    "util.toolbox": "0.0.55",
+    "util.wait": "0.0.29",
     "uuid": "^3.1.0"
   },
   "devDependencies": {
@@ -31,12 +31,12 @@
     "@types/node": "^8.0.53",
     "@types/ssh2": "^0.5.35",
     "@types/uuid": "^3.4.3",
-    "ava": "^0.23.0",
+    "ava": "^0.24.0",
     "coveralls": "^3.0.0",
     "nyc": "^11.3.0",
     "tslint": "^5.8.0",
-    "typescript": "^2.6.1",
-    "util.fixture": "0.0.59"
+    "typescript": "^2.6.2",
+    "util.fixture": "0.0.60"
   },
   "pkgwrap": {
     "cleanup": [
