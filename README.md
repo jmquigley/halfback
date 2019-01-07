@@ -1,6 +1,12 @@
-# util.scaffold [![Build Status](https://travis-ci.org/jmquigley/util.scaffold.svg?branch=master)](https://travis-ci.org/jmquigley/util.scaffold)  [![tslint code style](https://img.shields.io/badge/code_style-TSlint-5ed9c7.svg)](https://palantir.github.io/tslint/) [![Test Runner](https://img.shields.io/badge/testing-ava-blue.svg)](https://github.com/avajs/ava) [![NPM](https://img.shields.io/npm/v/util.scaffold.svg)](https://www.npmjs.com/package/util.scaffold) [![Coverage Status](https://coveralls.io/repos/github/jmquigley/util.scaffold/badge.svg?branch=master)](https://coveralls.io/github/jmquigley/util.scaffold?branch=master)
+# util.scaffold
 
 > A library to simplify SSH interactions with a remote server.  It can be used to run commands, change config, create files, etc.
+
+[![Build Status](https://travis-ci.org/jmquigley/util.scaffold.svg?branch=master)](https://travis-ci.org/jmquigley/util.scaffold)
+[![tslint code style](https://img.shields.io/badge/code_style-TSlint-5ed9c7.svg)](https://palantir.github.io/tslint/)
+[![Test Runner](https://img.shields.io/badge/testing-jest-blue.svg)](https://facebook.github.io/jest/)
+[![NPM](https://img.shields.io/npm/v/util.scaffold.svg)](https://www.npmjs.com/package/util.scaffold)
+[![Coverage Status](https://coveralls.io/repos/github/jmquigley/util.scaffold/badge.svg?branch=master)](https://coveralls.io/github/jmquigley/util.scaffold?branch=master)
 
 This module contains functions for simplifying SSH interactions with the remote production server.  It can be used to run commands, change config, create files, etc.
 
