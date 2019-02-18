@@ -1,15 +1,15 @@
-'use strict';
+"use strict";
 
-import * as fs from 'fs-extra';
-import {Client, ClientChannel, ConnectConfig} from 'ssh2';
-import {expandHomeDirectory as home} from 'util.home';
-import {callSync, INilCallback, nil, sanitize, success} from 'util.toolbox';
-import {Semaphore, wait} from 'util.wait';
-import * as uuid from 'uuid';
+import * as fs from "fs-extra";
+import {Client, ClientChannel, ConnectConfig} from "ssh2";
+import {expandHomeDirectory as home} from "util.home";
+import {callSync, nil, NilCallback, sanitize, success} from "util.toolbox";
+import {Semaphore, wait} from "util.wait";
+import * as uuid from "uuid";
 
-const pkg = require('./package.json');
+const pkg = require("./package.json");
 
-export interface IScaffoldOpts extends ConnectConfig {
+export interface ScaffoldOpts extends ConnectConfig {
 	stub?: boolean;
 	hostname?: string;
 	privateKeyFile?: string;
@@ -18,7 +18,7 @@ export interface IScaffoldOpts extends ConnectConfig {
 	timeout?: number;
 }
 
-export interface ICommandOpts {
+export interface CommandOpts {
 	cwd?: string;
 	delay?: number;
 	group?: string;
@@ -32,10 +32,9 @@ export interface ICommandOpts {
 
 /** an instance of the Scaffold class */
 export class Scaffold {
-
 	private _debug: boolean = pkg.debug;
 	private _cmds: string[] = [];
-	private _config: IScaffoldOpts = null;
+	private _config: ScaffoldOpts = null;
 	private _history: string[] = [];
 	private _local: boolean = false;
 	private _semaphore: Semaphore = null;
@@ -45,23 +44,30 @@ export class Scaffold {
 	 * that represents the configuration required to connect to a remote host using
 	 * SSH.  If the config is empty, then the commands are all executed on the
 	 * local host instead.
-	 * @param [opts] {IScaffoldOpts} holds SSH connection information from config.json
+	 * @param [opts] {ScaffoldOpts} holds SSH connection information from config.json
 	 * @constructor
 	 */
-	constructor(opts?: IScaffoldOpts) {
-		opts = Object.assign({
-			stub: false,
-			port: 22,
-			privateKeyFile: '~/.ssh/id_rsa',
-			publicKeyFile: '~/.ssh/id_rsa.pub',
-			timeout: 3600
-		}, opts);
+	constructor(opts?: ScaffoldOpts) {
+		opts = Object.assign(
+			{
+				stub: false,
+				port: 22,
+				privateKeyFile: "~/.ssh/id_rsa",
+				publicKeyFile: "~/.ssh/id_rsa.pub",
+				timeout: 3600
+			},
+			opts
+		);
 
 		this._semaphore = new Semaphore(opts.timeout);
 		this._config = opts;
 		if (opts.host != null) {
-			opts.privateKey = fs.readFileSync(home(opts.privateKeyFile)).toString();
-			opts.publicKey = fs.readFileSync(home(opts.publicKeyFile)).toString();
+			opts.privateKey = fs
+				.readFileSync(home(opts.privateKeyFile))
+				.toString();
+			opts.publicKey = fs
+				.readFileSync(home(opts.publicKeyFile))
+				.toString();
 		} else {
 			this._local = true;
 		}
@@ -77,19 +83,19 @@ export class Scaffold {
 	 *   - sudo: a boolean that determines if sudo should be used
 	 *   - delay: how many seconds to delay after the call.
 	 */
-	public run(cmd: string, opts: ICommandOpts = null): Scaffold {
-		opts = Object.assign({sudo: false, cwd: '', delay: 0}, opts);
+	public run(cmd: string, opts: CommandOpts = null): Scaffold {
+		opts = Object.assign({sudo: false, cwd: "", delay: 0}, opts);
 
-		if (cmd === '' || typeof cmd === 'undefined') {
+		if (cmd === "" || typeof cmd === "undefined") {
 			return this;
 		}
 
 		if (opts.cwd) {
-			cmd = 'cd ' + opts.cwd + ' && ' + ((opts.sudo) ? 'sudo ' : '') + cmd;
+			cmd = "cd " + opts.cwd + " && " + (opts.sudo ? "sudo " : "") + cmd;
 		}
 
 		if (opts.sudo) {
-			cmd = 'sudo -E ' + cmd;
+			cmd = "sudo -E " + cmd;
 		}
 
 		this._semaphore.increment();
@@ -110,8 +116,8 @@ export class Scaffold {
 	 * @param cmd {string} the sudo command to execute
 	 * @param opts {object} an object that holds the parameters to the sudo call.
 	 */
-	public sudo(cmd: string, opts: ICommandOpts = null) {
-		opts = Object.assign({cwd: ''}, opts);
+	public sudo(cmd: string, opts: CommandOpts = null) {
+		opts = Object.assign({cwd: ""}, opts);
 		opts.sudo = true;
 
 		return this.run(cmd, opts);
@@ -129,8 +135,8 @@ export class Scaffold {
 	 *
 	 * @returns {Scaffold} a reference to this object for chaining.
 	 */
-	public put(lfile: string, rfile: string, opts: ICommandOpts = null) {
-		opts = Object.assign({mode: '755', owner: 'root', group: 'root'}, opts);
+	public put(lfile: string, rfile: string, opts: CommandOpts = null) {
+		opts = Object.assign({mode: "755", owner: "root", group: "root"}, opts);
 
 		const id: string = uuid.v4();
 		let cmd = `tee ${rfile} <<-'${id}'\n`;
@@ -155,10 +161,12 @@ export class Scaffold {
 	 *
 	 * @returns {Scaffold} a reference to this object for chaining.
 	 */
-	public mkdir(directory: string, opts: ICommandOpts = null) {
-		opts = Object.assign({mode: '755', owner: 'root', group: 'root'}, opts);
+	public mkdir(directory: string, opts: CommandOpts = null) {
+		opts = Object.assign({mode: "755", owner: "root", group: "root"}, opts);
 
-		this.sudo(`[ ! -d ${directory} ] && sudo mkdir -p ${directory} || echo "directory already exists"`);
+		this.sudo(
+			`[ ! -d ${directory} ] && sudo mkdir -p ${directory} || echo "directory already exists"`
+		);
 		this.sudo(`chown -R ${opts.owner}.${opts.group} ${directory}`);
 		this.sudo(`chmod -R ${opts.mode} ${directory}`);
 
@@ -178,17 +186,19 @@ export class Scaffold {
 	 *
 	 * @returns {Scaffold} a reference to this object for chaining.
 	 */
-	public copy(src: string, dst: string, opts: ICommandOpts = null) {
+	public copy(src: string, dst: string, opts: CommandOpts = null) {
 		opts = Object.assign({recursive: false, sudo: false}, opts);
 
-		this.run(`cp ${(opts.recursive) ? '-r ' : ''}${src} ${dst}`, {sudo: opts.sudo});
+		this.run(`cp ${opts.recursive ? "-r " : ""}${src} ${dst}`, {
+			sudo: opts.sudo
+		});
 
 		return this;
 	}
 
 	/**
 	 * Starts the processing of the command queue.
-	 * @param [opts] {ICommandOpts} a set of commands used to process this queue.
+	 * @param [opts] {CommandOpts} a set of commands used to process this queue.
 	 *
 	 *     - verbose: {boolean} if true, then print more output, otherwise silent
 	 *     - shell: {string} the shell that the command should be run against.  This
@@ -198,17 +208,19 @@ export class Scaffold {
 	 * @param [cb] {Function} a callback function that is executed when this process
 	 * completes.  It will be executed on success or failure.
 	 */
-	public go(opts?: ICommandOpts | any, cb: INilCallback = nil) {
-
-		if (typeof opts === 'function') {
+	public go(opts?: CommandOpts | any, cb: NilCallback = nil) {
+		if (typeof opts === "function") {
 			cb = opts;
 			opts = null;
 		}
 
-		opts = Object.assign({
-			verbose: true,
-			shell: '/bin/bash'
-		}, opts);
+		opts = Object.assign(
+			{
+				verbose: true,
+				shell: "/bin/bash"
+			},
+			opts
+		);
 
 		if (this._local) {
 			this.runLocal(opts, cb);
@@ -227,7 +239,7 @@ export class Scaffold {
 
 	/**
 	 * Runs the given command queue on the local host.
-	 * @param opts {ICommandOpts} the options that are used to run all commands
+	 * @param opts {CommandOpts} the options that are used to run all commands
 	 * in the queue.
 	 * @param cb {Function} a callback function that is executed when the
 	 * remote execution finishes or has an error.
@@ -235,7 +247,7 @@ export class Scaffold {
 	 * @returns the result of the given callback function.
 	 * @private
 	 */
-	private runLocal(opts: ICommandOpts, cb = nil, self = this) {
+	private runLocal(opts: CommandOpts, cb = nil, self = this) {
 		let pos: number = 1;
 		let err: Error = null;
 
@@ -262,7 +274,7 @@ export class Scaffold {
 	/**
 	 * Runs the given command queue on the remote server.  It uses the ssh2
 	 * library to connnect and execute the commands on the server.
-	 * @param opts {ICommandOpts} the options that are used to run all commands
+	 * @param opts {CommandOpts} the options that are used to run all commands
 	 * in the queue.
 	 * @param cb {Function} a callback function that is executed when the
 	 * remote execution finishes or has an error.
@@ -270,7 +282,7 @@ export class Scaffold {
 	 * @returns the result of the given callback function.
 	 * @private
 	 */
-	private runRemote(opts: ICommandOpts, cb = nil, self = this) {
+	private runRemote(opts: CommandOpts, cb = nil, self = this) {
 		let pos = 1;
 
 		let conn: Client = null;
@@ -297,41 +309,52 @@ export class Scaffold {
 						return cb(err, self);
 					}
 
-					stream.on('close', (clerr: Error, signal: ClientChannel) => {
-						if (clerr) {
-							return cb(new Error(`command failed: ${clerr.message}, signal: ${signal}`), self);
-						}
-						self._semaphore.decrement();
+					stream
+						.on("close", (clerr: Error, signal: ClientChannel) => {
+							if (clerr) {
+								return cb(
+									new Error(
+										`command failed: ${
+											clerr.message
+										}, signal: ${signal}`
+									),
+									self
+								);
+							}
+							self._semaphore.decrement();
 
-						if (self._cmds.length > 0) {
-							// recursively call run to process the next item in the
-							// queue.
-							exec(ssh, self._cmds.shift());
-						}
-					}).on('data', (data: Buffer) => {
-						sanitize(data, opts.verbose);
-					}).stderr.on('data', (data: Buffer) => {
-						sanitize(data, opts.verbose, console.error);
-					});
+							if (self._cmds.length > 0) {
+								// recursively call run to process the next item in the
+								// queue.
+								exec(ssh, self._cmds.shift());
+							}
+						})
+						.on("data", (data: Buffer) => {
+							sanitize(data, opts.verbose);
+						})
+						.stderr.on("data", (data: Buffer) => {
+							sanitize(data, opts.verbose, console.error);
+						});
 				});
 			}
 		}
 
 		if (!self._config.stub) {
-			conn.on('ready', () => {
+			conn.on("ready", () => {
 				exec(conn, self._cmds.shift());
 			}).connect(self._config);
 		} else {
 			exec(conn, self._cmds.shift());
 		}
 
-		this._semaphore.wait()
+		this._semaphore
+			.wait()
 			.then(() => {
 				if (!self._config.stub) {
 					conn.end();
 				}
 
-				sanitize('End of remote processing', true);
+				sanitize("End of remote processing", true);
 				cb(null, self);
 			})
 			.catch((err: string) => {

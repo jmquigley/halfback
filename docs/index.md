@@ -25,7 +25,7 @@ local host instead.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [opts] | <code>IScaffoldOpts</code> | holds SSH connection information from config.json |
+| [opts] | <code>ScaffoldOpts</code> | holds SSH connection information from config.json |
 
 <a name="Scaffold+run"></a>
 
@@ -104,6 +104,6 @@ Starts the processing of the command queue.
 
 | Param | Type | Description |
 | --- | --- | --- |
-| [opts] | <code>ICommandOpts</code> | a set of commands used to process this queue.     - verbose: {boolean} if true, then print more output, otherwise silent     - shell: {string} the shell that the command should be run against.  This       is only relevant for the local processor.   The remote processor runs       with the shell of the authenticated in user. |
+| [opts] | <code>CommandOpts</code> | a set of commands used to process this queue.     - verbose: {boolean} if true, then print more output, otherwise silent     - shell: {string} the shell that the command should be run against.  This       is only relevant for the local processor.   The remote processor runs       with the shell of the authenticated in user. |
 | [cb] | <code>function</code> | a callback function that is executed when this process completes.  It will be executed on success or failure. |
 
