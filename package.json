@@ -26,9 +26,10 @@
 	"dependencies": {
 		"fs-extra": "^7.0.1",
 		"ssh2": "0.8.2",
-		"util.home": "0.0.29",
-		"util.toolbox": "0.0.70",
-		"util.wait": "0.0.35",
+		"util.home": "0.0.30",
+		"util.toolbox": "0.0.73",
+		"util.toolbox-node": "^0.0.2",
+		"util.wait": "0.0.36",
 		"uuid": "^3.3.2"
 	},
 	"devDependencies": {
@@ -40,19 +41,19 @@
 		"@babel/runtime": "^7.3.4",
 		"@types/fs-extra": "5.0.5",
 		"@types/jest": "^24.0.9",
-		"@types/node": "^11.9.6",
+		"@types/node": "^11.10.5",
 		"@types/ssh2": "^0.5.38",
 		"@types/uuid": "^3.4.4",
 		"babel-minify": "^0.5.0",
 		"babel-preset-minify": "^0.5.0",
 		"coveralls": "^3.0.3",
-		"jest": "^24.1.0",
+		"jest": "^24.3.1",
 		"prettier": "^1.16.4",
-		"tslint": "^5.13.0",
+		"tslint": "^5.13.1",
 		"tslint-config-prettier": "^1.18.0",
 		"typescript": "^3.3.3333",
-		"util.fixture": "0.0.68",
-		"util.pkgwrap": "^0.0.102"
+		"util.fixture": "0.0.69",
+		"util.pkgwrap": "^0.0.104"
 	},
 	"pkgwrap": {
 		"cleanup": [

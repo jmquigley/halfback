@@ -3,7 +3,8 @@
 import * as fs from "fs-extra";
 import {Client, ClientChannel, ConnectConfig} from "ssh2";
 import {expandHomeDirectory as home} from "util.home";
-import {callSync, nil, NilCallback, sanitize, success} from "util.toolbox";
+import {nil, NilCallback, sanitize, success} from "util.toolbox";
+import {callSync} from "util.toolbox-node";
 import {Semaphore, wait} from "util.wait";
 import * as uuid from "uuid";
 
