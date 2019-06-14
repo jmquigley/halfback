@@ -1,13 +1,13 @@
-"use strict";
-
 import * as fs from "fs-extra";
 import {Client, ClientChannel, ConnectConfig} from "ssh2";
+import {success} from "util.constants";
 import {expandHomeDirectory as home} from "util.home";
-import {nil, NilCallback, sanitize, success} from "util.toolbox";
+import {nil, NilCallback, sanitize} from "util.toolbox";
 import {callSync} from "util.toolbox-node";
 import {Semaphore, wait} from "util.wait";
 import * as uuid from "uuid";
 
+const debug = require("debug")("util.scaffold");
 const pkg = require("./package.json");
 
 export interface ScaffoldOpts extends ConnectConfig {
@@ -254,10 +254,11 @@ export class Scaffold {
 
 		while (this._cmds.length > 0 && err == null) {
 			const cmd: string = this._cmds.shift();
+
 			this._semaphore.decrement();
 
 			if (pkg.debug) {
-				sanitize(`Executing[${pos++}]: ${cmd}`, true);
+				sanitize(`Executing[${pos++}]: ${cmd}`, true, debug);
 			}
 
 			this._history.push(cmd);
@@ -293,7 +294,7 @@ export class Scaffold {
 
 		function exec(ssh: Client, cmd: string) {
 			if (opts.verbose || self._debug) {
-				sanitize(`Executing[${pos++}]: ${cmd}`, true);
+				sanitize(`Executing[${pos++}]: ${cmd}`, true, debug);
 			}
 
 			self._history.push(cmd);
@@ -315,9 +316,7 @@ export class Scaffold {
 							if (clerr) {
 								return cb(
 									new Error(
-										`command failed: ${
-											clerr.message
-										}, signal: ${signal}`
+										`command failed: ${clerr.message}, signal: ${signal}`
 									),
 									self
 								);
@@ -331,7 +330,7 @@ export class Scaffold {
 							}
 						})
 						.on("data", (data: Buffer) => {
-							sanitize(data, opts.verbose);
+							sanitize(data, opts.verbose, debug);
 						})
 						.stderr.on("data", (data: Buffer) => {
 							sanitize(data, opts.verbose, console.error);
@@ -355,7 +354,7 @@ export class Scaffold {
 					conn.end();
 				}
 
-				sanitize("End of remote processing", true);
+				sanitize("End of remote processing", true, debug);
 				cb(null, self);
 			})
 			.catch((err: string) => {

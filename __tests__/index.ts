@@ -1,8 +1,10 @@
 "use strict";
 
+const debug = require("debug")("util.scaffold:test");
+
 import * as path from "path";
 import {cleanup, Fixture} from "util.fixture";
-import {isLinux, isMac, isWin} from "util.toolbox";
+import {isLinux, isMac, isWin} from "util.toolbox-node";
 import * as uuid from "uuid";
 import {Scaffold} from "../index";
 
@@ -320,7 +322,7 @@ test("Run a local queue of commands (silent)", (done) => {
 	expect(scaffold).toBeDefined();
 	expect(scaffold.local).toBe(true);
 
-	if (isLinux || isMac) {
+	if (isLinux() || isMac()) {
 		scaffold
 			.run("ls -axpl /usr/local")
 			.run("ls -axpl /usr/local/lib")
@@ -334,7 +336,7 @@ test("Run a local queue of commands (silent)", (done) => {
 				expect(inst).toBe(scaffold);
 				done();
 			});
-	} else if (isWin) {
+	} else if (isWin()) {
 		scaffold
 			.run("dir C:\\Windows")
 			.run("dir C:\\Windows\\System")
@@ -357,7 +359,7 @@ test("Run a test of go() function with no options", (done) => {
 	expect(scaffold).toBeDefined();
 	expect(scaffold.local).toBe(true);
 
-	if (isLinux || isMac) {
+	if (isLinux() || isMac()) {
 		scaffold.run("ls -axpl /usr/local").go((err: Error, inst: Scaffold) => {
 			if (err) {
 				throw new Error(err);
@@ -367,7 +369,7 @@ test("Run a test of go() function with no options", (done) => {
 			expect(inst).toBe(scaffold);
 			done();
 		});
-	} else if (isWin) {
+	} else if (isWin()) {
 		scaffold.run("dir C:\\Windows").go((err: Error, inst: Scaffold) => {
 			if (err) {
 				throw new Error(err);

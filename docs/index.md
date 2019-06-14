@@ -6,7 +6,7 @@ an instance of the Scaffold class
 **Kind**: global class  
 
 * [Scaffold](#Scaffold)
-    * [new Scaffold([opts])](#new_Scaffold_new)
+    * [new exports.Scaffold([opts])](#new_Scaffold_new)
     * [.run(cmd, opts)](#Scaffold+run)
     * [.sudo(cmd, opts)](#Scaffold+sudo)
     * [.put(lfile, rfile, opts)](#Scaffold+put) ⇒ [<code>Scaffold</code>](#Scaffold)
@@ -16,7 +16,7 @@ an instance of the Scaffold class
 
 <a name="new_Scaffold_new"></a>
 
-### new Scaffold([opts])
+### new exports.Scaffold([opts])
 The constructor function for the scaffolding.  This takes a single parameter
 that represents the configuration required to connect to a remote host using
 SSH.  If the config is empty, then the commands are all executed on the
