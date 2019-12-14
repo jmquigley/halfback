@@ -1,5 +1,3 @@
-"use strict";
-
 const debug = require("debug")("util.scaffold:test");
 
 import * as path from "path";

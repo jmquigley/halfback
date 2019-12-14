@@ -2,12 +2,11 @@
 
 > A library to simplify SSH interactions with a remote server.  It can be used to run commands, change config, create files, etc.
 
-[![build](https://circleci.com/gh/jmquigley/util.scaffold/tree/master.svg?style=shield)](https://circleci.com/gh/jmquigley/util.scaffold/tree/master)
+[![build](https://github.com/jmquigley/util.scaffold/workflows/build/badge.svg)](https://github.com/jmquigley/util.scaffold/actions)
 [![analysis](https://img.shields.io/badge/analysis-tslint-9cf.svg)](https://palantir.github.io/tslint/)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg?style=flat-square)](https://github.com/prettier/prettier)
 [![testing](https://img.shields.io/badge/testing-jest-blue.svg)](https://facebook.github.io/jest/)
 [![NPM](https://img.shields.io/npm/v/util.scaffold.svg)](https://www.npmjs.com/package/util.scaffold)
-[![coverage](https://coveralls.io/repos/github/jmquigley/util.scaffold/badge.svg?branch=master)](https://coveralls.io/github/jmquigley/util.scaffold?branch=master)
 
 This module contains functions for simplifying SSH interactions with the remote production server.  It can be used to run commands, change config, create files, etc.
 
